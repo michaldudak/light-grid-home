@@ -1,0 +1,78 @@
+﻿@{
+	ViewBag.Title = "Demos";
+}
+<h1>Demos</h1>
+
+<p>The fastest way to get going - copy from here, paste to your project.</p>
+
+<section ng-app="demoApp">	
+	<h2>The "Hello world" grid</h2>
+	<p>This is the most simple setup. The <code>lg-bound-column</code> directive can be used to display data from the model without any processing.</p>
+	<div class="row" ng-controller="helloWorldDemoController">
+		<div class="col-lg-6">
+			<h3>HTML</h3>
+			<pre ng-non-bindable class="small">
+&lt;light-grid id="helloWorldGrid" data="model" class="table table-striped"&gt;
+	&lt;lg-bound-column title="'Make'" property="make"&gt;&lt;/lg-bound-column&gt;
+	&lt;lg-bound-column title="'Model'" property="model"&gt;&lt;/lg-bound-column&gt;
+&lt;/light-grid&gt;
+</pre>
+			
+			<h3>JS</h3>
+			<pre ng-non-bindable class="small">
+$scope.model = [
+	{ make: "Honda", model: "VFR800" },
+	{ make: "BMW", model: "R 1200 GS" },
+	{ make: "Kawasaki", model: "Z1000 SX" }
+];
+</pre>
+		</div>
+		<div class="col-lg-6">
+			<h3>Result</h3>
+			<light-grid id="helloWorldGrid" data="model" class="table table-striped">
+				<lg-bound-column title="'Make'" property="make"></lg-bound-column>
+				<lg-bound-column title="'Model'" property="model"></lg-bound-column>
+			</light-grid>
+		</div>
+	</div>
+	
+	<h2>Customizable column templates</h2>
+	<p>
+		In most cases <code>lg-bound-column</code> won't be enough. There <code>lg-column</code> comes into play.
+		It gives complete control over cell rendering
+	</p>
+	<div class="row" ng-controller="helloWorldDemoController">
+		<div class="col-lg-6">
+			<h3>HTML</h3>
+			<pre ng-non-bindable class="small">
+&lt;light-grid id="helloWorldGrid" data="model" class="table table-striped"&gt;
+	&lt;lg-column title="'Make'" &gt;&lt;span class="text-warning"&gt;{{rowData.make}}&lt;/span&gt;&lt;/lg-column&gt;
+	&lt;lg-column title="'Model'" &gt;&lt;strong&gt;{{rowData.model}}&lt;/strong&gt; - a great bike&lt;/lg-column&gt;
+&lt;/light-grid&gt;
+</pre>
+
+			<h3>JS</h3>
+			<pre ng-non-bindable class="small">
+$scope.model = [
+	{ make: "Honda", model: "VFR800" },
+	{ make: "BMW", model: "R 1200 GS" },
+	{ make: "Kawasaki", model: "Z1000 SX" }
+];
+</pre>
+		</div>
+		<div class="col-lg-6">
+			<h3>Result</h3>
+			<light-grid id="helloWorldGrid" data="model" class="table table-striped">
+				<lg-column title="'Make'"><span class="text-warning">{{rowData.make}}</span></lg-column>
+				<lg-column title="'Model'"><strong>{{rowData.model}}</strong> - a great bike</lg-column>
+			</light-grid>
+		</div>
+	</div>
+</section>
+
+@section scripts
+{
+	<script src="~/Scripts/light-grid-0.1.0.js"></script>
+	<script src="~/Scripts/demoApp.js"></script>
+	<script src="~/Scripts/controllers/helloWorldController.js"></script>
+}

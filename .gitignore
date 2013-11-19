@@ -1,0 +1,6 @@
+*.sln
+*.suo
+Web/bin/
+Web/obj/
+packages/
+*.user

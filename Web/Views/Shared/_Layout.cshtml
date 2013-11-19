@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Light Grid - @ViewBag.Title</title>
+		@Styles.Render("~/Content/css")
+		@Scripts.Render("~/bundles/modernizr")
+	</head>
+	<body>
+		<a href="https://github.com/doodack/light-grid">
+			<img style="position: absolute; top: 60px; right: 0; border: 0; z-index: 1001" src="~/Content/forkme.png" alt="Fork me on GitHub">
+		</a>
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					@Html.ActionLink("Light Grid", "Index", "Home", null, new { @class = "navbar-brand" })
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li>@Html.ActionLink("Home", "Index", "Home")</li>
+						<li>@Html.ActionLink("Overview", "Overview", "Home")</li>
+						<li>@Html.ActionLink("Demos", "Demos", "Home")</li>
+						<li>@Html.ActionLink("Docs", "API", "Home")</li>
+						<li>@Html.ActionLink("Download", "Download", "Home")</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="container body-content">
+			@RenderBody()
+			<hr />
+			<footer>
+				<p>Code licensed under <a href="https://github.com/doodack/light-grid/blob/master/LICENSE">the MIT license</a>.</p>
+				<p>
+					<iframe src="http://ghbtns.com/github-btn.html?user=doodack&repo=light-grid&type=watch&count=true"
+					        allowtransparency="true" frameborder="0" scrolling="0" width="85" height="20"></iframe>
+					<iframe src="http://ghbtns.com/github-btn.html?user=doodack&repo=light-grid&type=fork&count=true"
+					        allowtransparency="true" frameborder="0" scrolling="0" width="85" height="20"></iframe>
+					<iframe src="http://ghbtns.com/github-btn.html?user=doodack&repo=light-grid&type=follow&count=true"
+					        allowtransparency="true" frameborder="0" scrolling="0" width="160" height="20"></iframe>
+				</p>
+				<p><small>&copy; @DateTime.Now.Year - <a href="http://dudak.pl">Michał Dudak</a> | <a href="http://digitalcreations.pl">Digital Creations</a></small></p>
+			</footer>
+		</div>
+
+		@Scripts.Render("~/bundles/angular")
+		@Scripts.Render("~/bundles/bootstrap")
+		@RenderSection("scripts", required: false)
+	</body>
+</html>
