@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace Web
 {
@@ -8,22 +7,18 @@ namespace Web
 		// For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
 		public static void RegisterBundles(BundleCollection bundles)
 		{
-			bundles.Add(new ScriptBundle("~/bundles/angular")
-				.Include("~/Scripts/jquery-{version}.js")
-				.Include("~/Scripts/angular.js"));
+			var scripts =
+				new ScriptBundle("~/bundles/libraries")
+					.Include("~/Scripts/jquery-{version}.js")
+					.Include("~/Scritps/bootstrap.js")
+					.Include("~/Scripts/angular.js");
 
-			// Use the development version of Modernizr to develop with and learn from. Then, when you're
-			// ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
-			bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-						"~/Scripts/modernizr-*"));
+			scripts.Transforms.Add(new JsMinify());
+			bundles.Add(scripts);
 
-			bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-					  "~/Scripts/bootstrap.js",
-					  "~/Scripts/respond.js"));
-
-			bundles.Add(new StyleBundle("~/Content/css").Include(
-					  "~/Content/bootstrap.css",
-					  "~/Content/site.css"));
+			var styles = new StyleBundle("~/Content/css").Include("~/Content/bootstrap.css", "~/Content/site.css");
+			styles.Transforms.Add(new CssMinify());
+			bundles.Add(styles);
 		}
 	}
 }

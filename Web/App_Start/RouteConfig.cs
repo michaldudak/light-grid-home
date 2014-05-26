@@ -8,12 +8,9 @@ namespace Web
 		public static void RegisterRoutes(RouteCollection routes)
 		{
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-			
-			routes.MapRoute(
-				name: "Default",
-				url: "{action}",
-				defaults: new { controller = "Home", action = "Index" }
-			);
+
+			routes.MapRoute("Demos", "Demos/{viewName}", new { controller = "Demos", action = "Partial" });
+			routes.MapRoute("Default", "{action}", new { controller = "Home", action = "Index" });
 		}
 	}
 }

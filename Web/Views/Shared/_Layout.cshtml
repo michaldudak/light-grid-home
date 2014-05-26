@@ -6,7 +6,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Light Grid - @ViewBag.Title</title>
 		@Styles.Render("~/Content/css")
-		@Scripts.Render("~/bundles/modernizr")
 	</head>
 	<body>
 		<a href="https://github.com/doodack/light-grid">
@@ -50,8 +49,7 @@
 			</footer>
 		</div>
 
-		@Scripts.Render("~/bundles/angular")
-		@Scripts.Render("~/bundles/bootstrap")
+		@Scripts.Render("~/bundles/libraries")
 		@RenderSection("scripts", required: false)
 	</body>
 </html>
