@@ -148,7 +148,6 @@
     <Content Include="Views\Home\Demos.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Overview.cshtml" />
-    <Content Include="Views\Home\Download.cshtml" />
     <Content Include="Views\Demos\clientSidePaging.cshtml" />
     <Content Include="Views\Demos\fullyFeaturedLocal.cshtml" />
     <Content Include="Views\Demos\hiddenColumns.cshtml" />
