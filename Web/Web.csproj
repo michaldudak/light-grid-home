@@ -126,21 +126,14 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular-route.js" />
-    <Content Include="Scripts\angular-route.min.js" />
     <Content Include="Scripts\angular.js" />
-    <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Data\zips.json" />
     <None Include="Properties\PublishProfiles\light-grid.digitalcreations.pl - Web Deploy.pubxml" />
-    <Content Include="Scripts\angular.min.js.map" />
-    <Content Include="Scripts\angular-route.min.js.map" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\demoApp.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\light-grid-0.0.0.js" />
+    <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\light-grid.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Demos\clientSideSearch.cshtml" />
     <Content Include="Views\Demos\expandedRow.cshtml" />
@@ -162,9 +155,11 @@
     <Content Include="Views\Home\Api.cshtml" />
     <Content Include="Views\Home\Demos.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Overview.cshtml" />
     <Content Include="Views\Home\Download.cshtml" />
+    <Content Include="Views\Demos\clientSidePaging.cshtml" />
+    <Content Include="Views\Demos\fullyFeaturedLocal.cshtml" />
+    <Content Include="Views\Demos\hiddenColumns.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

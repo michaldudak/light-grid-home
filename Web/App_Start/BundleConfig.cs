@@ -9,9 +9,10 @@ namespace Web
 		{
 			var scripts =
 				new ScriptBundle("~/bundles/libraries")
-					.Include("~/Scripts/jquery-{version}.js")
+					.Include("~/Scripts/jquery.js")
 					.Include("~/Scritps/bootstrap.js")
-					.Include("~/Scripts/angular.js");
+					.Include("~/Scripts/angular.js")
+					.Include("~/Scripts/angular-route.js");
 
 			scripts.Transforms.Add(new JsMinify());
 			bundles.Add(scripts);

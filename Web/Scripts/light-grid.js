@@ -1,8 +1,14 @@
-// THIS IS SOOOO IN PROGRESS...
+/*!
+ Light Grid 0.1.0 
+
+ by Micha³ Dudak
+ https://github.com/michaldudak/light-grid.git
+ license: MIT
+
+ build date: 2015-06-22T09:04:06.337Z
+*/
 
 (function (window, angular, $, undefined) {
-
-	/* global angular */
 
 	if (typeof ($) === "undefined") {
 		throw new Error("Light Grid requires jQuery.");
@@ -12,11 +18,8 @@
 		throw new Error("jQuery must be included before Angular.");
 	}
 
-	var grid = { // jshint unused:false
-		module: angular.module("light-grid", [])
-	};
+	angular.module("lightGrid", []);
 
-	;/* global angular, grid */
 
 	/**
 	 * Represents a cell in a table.
@@ -25,7 +28,7 @@
 	 * @function cellDirective
 	 * @module lightGrid
 	 */
-	grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
+	angular.module("lightGrid").directive("lgCell", ["$compile", function cellDirective($compile) {
 		"use strict";
 
 		function countProperties(obj) {
@@ -59,19 +62,19 @@
 					element.css("width", scope.columnDefinition.attributes.width);
 				}
 
-				if (countProperties(views) === 1 && typeof (views["*"]) !== "undefined") {
-					// optimization: if there is just default view defined, we don't need ngSwitch
+				if (countProperties(views) === 1 && typeof views["*"] !== "undefined") {
+					// Optimization: if there is just default view defined, we don't need ngSwitch
 
 					var onlyView = views["*"];
 
-					if (typeof (onlyView) === "function") {
+					if (typeof onlyView === "function") {
 						onlyView(transclusionScope, function (transcludedClone) {
 							element.append(transcludedClone);
 						});
 					} else {
 						var onlyViewNode = angular.element("<div>" + onlyView + "</div>");
-						$compile(onlyViewNode)(transclusionScope);
 						element.append(onlyViewNode);
+						$compile(onlyViewNode)(transclusionScope);
 					}
 
 					return;
@@ -82,47 +85,46 @@
 
 				for (var view in views) {
 					if (views.hasOwnProperty(view) && view !== "*") {
-						// processing all the views except the default one:
+						// Processing all the views except the default one:
 						// each view gets linked with the cell scope and wrapped in a ng-switch-when container
 						// that shows it only when scope's view property matches the view name
 						var viewDefinition = views[view];
 						var switchElement = angular.element("<div ng-switch-when='" + view + "' />");
 
-						// view content is added to the container with a ng-switch attribute
+						// View content is added to the container with a ng-switch attribute
 						switchRoot.append(switchElement);
 
 						cases.push({ node: switchElement, content: viewDefinition });
 					}
 				}
 
-				// The '*' view is a special case - it defines the 'fallback' view used if no other view matches
+				// The '*' view is a special case - it defines the 'fallback' view used if no other view matches.
 				if (views["*"]) {
 					var defaultElement = angular.element("<div ng-switch-default />");
 					switchRoot.append(defaultElement);
 					cases.push({ node: defaultElement, content: views["*"] });
 				}
 
-				for (var i = 0; i < cases.length; ++i) {
-					if (typeof (cases[i].content) === "function") {
-						var linker = cases[i].content;
+				cases.forEach(function (caseElement) {
+					if (typeof (caseElement.content) === "function") {
+						var linker = caseElement.content;
 						linker(transclusionScope, function (c) {
-							cases[i].node.append(c);
+							caseElement.node.append(c);
 						});
 					} else {
-						var clone = cases[i].content;
-						cases[i].node.append(clone);
+						var clone = caseElement.content;
+						caseElement.node.append(clone);
 					}
-				}
+				});
 
 				element.append(switchRoot);
 
-				// the whole container needs to be compiled to enable the ng-switch directive
+				// The whole container needs to be compiled to enable the ng-switch directive.
 				$compile(switchRoot)(transclusionScope);
 			}
 		};
 	}]);
 
-	;/* global grid */
 
 	/**
 	 * Defines a column template.
@@ -130,7 +132,7 @@
 	 *  - title - {String} (interpolated) title of the column (used to render a header if header template is not specified)
 	 *  - visible - {Boolean} specifies if a column should be rendered
 	 */
-	grid.module.directive("lgColumn", function () {
+	angular.module("lightGrid").directive("lgColumn", function () {
 		"use strict";
 
 		return {
@@ -202,7 +204,7 @@
 				});
 
 				linker(scope, function (clone) {
-					// transcluded content is added to the element so that lgColumnController can be 
+					// transcluded content is added to the element so that lgColumnController can be
 					// required by lgView directives
 					instanceElement.append(clone);
 				});
@@ -228,12 +230,11 @@
 		};
 	});
 
-	;/* global grid */
 
 	/**
 	 * Dummy directive to be placed on a row containing column templates
 	 * (when writing HTML-compliant markup)
-	 * 
+	 *
 	 * Example:
 	 *   <table data-light-grid id="sampleGrid" data-data="people">
 	 *     <tr data-column-templates>
@@ -242,27 +243,36 @@
 	 *     </tr>
 	 *   </table>
 	 */
-	grid.module.directive("lgColumnTemplates", function () {
+	angular.module("lightGrid").directive("lgColumnTemplates", function () {
 		"use strict";
 
-		return function (scope, element) {
-			element.remove();
+		return {
+			restrict: "A",
+			link: function (scope, element) {
+				var parent = element.parent();
+				// browsers may create additional tbody tag surrounding the <td lg-column-templates">. We don't need this.
+				if (parent[0].tagName === "TBODY" && parent.children().length === 1) {
+					parent.remove();
+				} else {
+					element.remove();
+				}
+			}
 		};
+
 	});
 
-	;/* global angular, grid */
 
 	/**
 	 * The root grid directive.
 	 * Parameters:
 	 *  - id - {String} ID of the grid. This attribute must be present and unique.
-	 *  - data - {Array} (interpolated) data model displayed on the grid (optional).
+	 *  - model - {Array} (interpolated) data model displayed on the grid (optional).
 	 *  - initial-view - {String} Name of the initial view mode of all rows in the grid.
 	 */
-	grid.module.directive("lightGrid", ["lgGridService", function gridDirective(gridService) {
+	angular.module("lightGrid").directive("lightGrid", function gridDirective() {
 		"use strict";
 
-		var gridController = ["$scope", "$element", function GridController($scope, $element) {
+		var gridController = function GridController($scope, $element) {
 
 			var columnDefinitions = {};
 			$scope.visibleColumns = [];
@@ -272,24 +282,24 @@
 			 * @return {Array} Model displayed on the grid.
 			 */
 			this.getData = function getData() {
-				return $scope.data;
+				return $scope.model;
 			};
 
 			/**
 			 * Gets the current view model displayed on the grid.
-			 * @return {Array} Current state of the grid's view model 
+			 * @return {Array} Current state of the grid's view model
 			 */
 			this.getViewData = function getViewData() {
-				if (angular.isArray($scope.data)) {
-					return $scope.data.map(function (elem) {
-						return elem._viewData;
+				if (angular.isArray($scope.model)) {
+					return $scope.model.map(function (elem) {
+						return elem.$viewData;
 					});
 				} else {
 					var gridViewData = {};
 
-					for (var prop in $scope.data) {
-						if ($scope.data.hasOwnProperty(prop)) {
-							gridViewData[prop] = $scope.data[prop]._viewData;
+					for (var prop in $scope.model) {
+						if ($scope.model.hasOwnProperty(prop)) {
+							gridViewData[prop] = $scope.model[prop].$viewData;
 						}
 					}
 
@@ -302,7 +312,7 @@
 			 * @param {[type]} newData [description]
 			 */
 			this.setData = function setData(newData) {
-				$scope.data = newData;
+				$scope.model = newData;
 			};
 
 			function updateVisibleColumns() {
@@ -341,7 +351,7 @@
 			/**
 			 * Changes a view in all visible rows of the grid.
 			 * This method is asynchronous.
-			 * 
+			 *
 			 * @param  {String} viewName Name of the new view.
 			 * @async
 			 */
@@ -352,7 +362,7 @@
 			/**
 			 * Copies values from the view model to the data model.
 			 * This method is asynchronous.
-			 * 
+			 *
 			 * @async
 			 */
 			this.acceptViewModel = function () {
@@ -368,7 +378,7 @@
 			};
 
 			/**
-			 * Gets the scope of the grid directive. 
+			 * Gets the scope of the grid directive.
 			 * @return {Scope} Scope of the grid directive.
 			 */
 			this.getScope = function () {
@@ -390,18 +400,19 @@
 			this.getId = function () {
 				return $scope.id;
 			};
-		}];
+		};
+		gridController.$inject = ["$scope", "$element"];
 
 		// TODO: footer support
 		var defaultTemplate =
 			"<table class='light-grid'>" +
 				"<thead><tr lg-header-row></tr></thead>" +
-				"<tbody><tr lg-row default-view='read' initial-view='{{ initialView || \"read\" }}' ng-repeat='rowData in data'></tr></tbody>" +
+				"<tbody><tr lg-row default-view='read' initial-view='{{ initialView || \"read\" }}' ng-repeat='rowData in model'></tr></tbody>" +
 			"</table>";
 
 		return {
 			scope: {
-				data: "=?",
+				model: "=",
 				id: "@",
 				initialView: "@"
 			},
@@ -420,25 +431,18 @@
 				transclude(transclusionScope, function (clone) {
 					elem.append(clone);
 				});
-
-				gridService.registerGrid(scope.id, scope.gridController);
-
-				scope.$on("$destroy", function () {
-					gridService.unregisterGrid(scope.id);
-				});
 			},
 			controller: gridController,
 			controllerAs: "gridController"
 		};
-	}]);
+	});
 
-	;/* global grid */
 
 	/**
 	 * Represents a cell in a header of a table.
 	 * Does not expose any API.
 	 */
-	grid.module.directive("lgHeaderCell", function headerCellDirective() {
+	angular.module("lightGrid").directive("lgHeaderCell", function headerCellDirective() {
 		"use strict";
 
 		return {
@@ -475,27 +479,26 @@
 		};
 	});
 
-	;/* global grid */
 
 	/**
 	 * Represents a row inside grid's header.
 	 * Does not expose any API.
 	 */
-	grid.module.directive("lgHeaderRow", function headerRowDirective() {
+	angular.module("lightGrid").directive("lgHeaderRow", function headerRowDirective() {
 		"use strict";
 
 		return {
+			restrict: "A",
 			template: "<th lg-header-cell ng-repeat='columnDefinition in visibleColumns'></th>"
 		};
 	});
 
-	;/* global grid */
 
 	/**
 	 * Template for the header (defined in the lgColumn)
 	 * Does not expose any API.
 	 */
-	grid.module.directive("lgHeaderView", function () {
+	angular.module("lightGrid").directive("lgHeaderView", function () {
 		"use strict";
 
 		return {
@@ -509,16 +512,15 @@
 		};
 	});
 
-	;/* global angular, grid */
 
-	grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
+	angular.module("lightGrid").directive("lgRow", ["$compile", function rowDirective($compile) {
 		"use strict";
 
 		var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{visibleColumns.length}}' ng-include='expandedTemplate'></td></tr>";
 
 		function defineViewDataProperty(obj) {
 			try {
-				Object.defineProperty(obj, "_viewData", {
+				Object.defineProperty(obj, "$viewData", {
 					configurable: true,
 					writable: true
 				});
@@ -526,11 +528,12 @@
 				// IE < 9 does not support properties
 				// falling back to plain field
 
-				obj._viewData = null;
+				obj.$viewData = null;
 			}
 		}
 
 		return {
+			restrict: "A",
 			template: "<td lg-cell ng-repeat='columnDefinition in visibleColumns'></td>",
 			controller: ["$scope", "$element", function rowController($scope, $element) {
 				var self = this;
@@ -572,7 +575,6 @@
 				 */
 				this.openDetails = function (detailsTemplate) {
 					$scope.expandedTemplate = detailsTemplate;
-					console.log("Opening details on row " + $scope.$index);
 				};
 
 				/**
@@ -580,7 +582,6 @@
 				 */
 				this.closeDetails = function () {
 					$scope.expandedTemplate = null;
-					console.log("Closing details on row " + $scope.$index);
 				};
 
 				/**
@@ -614,17 +615,17 @@
 				this.acceptViewModel = function () {
 					angular.extend($scope.rowData, $scope.viewData);
 					defineViewDataProperty($scope.rowData);
-					$scope.rowData._viewData = $scope.viewData;
+					$scope.rowData.$viewData = $scope.viewData;
 				};
 
 				/**
 				 * Discards the row's view model.
 				 */
 				this.resetViewModel = function () {
-					delete $scope.rowData._viewData;
+					delete $scope.rowData.$viewData;
 					$scope.viewData = angular.copy($scope.rowData);
 					defineViewDataProperty($scope.rowData);
-					$scope.rowData._viewData = $scope.viewData;
+					$scope.rowData.$viewData = $scope.viewData;
 				};
 
 				/**
@@ -685,12 +686,11 @@
 		};
 	}]);
 
-	;/* global grid */
 
 	/**
 	 * Defines a view in the column template
 	 */
-	grid.module.directive("lgView", function () {
+	angular.module("lightGrid").directive("lgView", function () {
 		"use strict";
 
 		return {
@@ -712,175 +712,342 @@
 		};
 	});
 
-	;/* global grid */
+
+	angular.module("lightGridTemplates", ["lightGrid"]);
+
 
 	/**
-	 * Provides methods exposing grid controllers to other elements on a page.
+	 * Simple read-only column bound to a model's property
 	 */
-	grid.module.service("lgGridService", [function gridService() {
+	angular.module("lightGridTemplates").directive("lgBoundColumn", function () {
 		"use strict";
 
-		var grids = {};
-		var dataProviders = {};
+		var template = "<lg-column>{{rowData['{property}']}}</lg-column>";
 
-		/**
-		 * Gets the controller of the grid with a given ID.
-		 *
-		 * @param {String} id - ID of the grid.
-		 * @returns {Object} Grid controller
-		 */
-		this.getGridController = function getGridController(id) {
-			return grids[id];
+		return {
+			restrict: "EA",
+			template: function (elem, attrs) {
+				return template.replace("{property}", attrs.property);
+			},
+			replace: true
+		};
+	});
+
+
+	/**
+	 * Simple editable column. Renders either a property value or a text input bound to a property,
+	 * depending on a view mode ("edit" for edit mode, any other for read-only mode)
+	 */
+	angular.module("lightGridTemplates").directive("lgEditableColumn", function () {
+		"use strict";
+
+		var template = "<lg-column><lg-view>{{rowData[\"{property}\"]}}</lg-view><lg-view view='edit'>" +
+			"<input type='text' ng-model='viewData[\"{property}\"]' class='form-control input-sm' /></lg-view></lg-column>";
+
+		return {
+			restrict: "EA",
+			template: function (elem, attrs) {
+				return template.replace(/\{property\}/g, attrs.property);
+			},
+			replace: true
+		};
+	});
+
+
+	/**
+	 * Simple sortable column bound to a model's property
+	 */
+	angular.module("lightGridTemplates").directive("lgSortableColumn", function () {
+		"use strict";
+
+		var template = "<lg-column><lg-header-view><span lg-sorter sort-property='{property}' data-provider='{provider}'>{{ {title} }}</span></lg-header-view><lg-view>{{rowData['{property}']}}</lg-view></lg-column>";
+
+		return {
+			restrict: "EA",
+			template: function (elem, attrs) {
+				return template
+					.replace(/\{property\}/g, attrs.property)
+					.replace(/\{title\}/g, attrs.title)
+					.replace(/\{provider}/g, attrs.provider);
+			},
+			replace: true
+		};
+	});
+
+
+	angular.module("lightGridDataProviders", ["lightGrid"]);
+
+
+	function LocalDataProvider(model, filterFilter, orderByFilter, limitToFilter, defaultViewSettings) {
+
+		var viewSettings;
+		var viewModel;
+		var filteredItemCount;
+		var originalModel = model;
+
+		function updateFilters() {
+			viewModel = originalModel;
+
+			if (viewSettings.filter) {
+				viewModel = filterFilter(viewModel, viewSettings.filter.expression, viewSettings.filter.comparator);
+			}
+
+			if (viewSettings.orderBy) {
+				viewModel = orderByFilter(viewModel, viewSettings.orderBy.expression, viewSettings.orderBy.reverse);
+			}
+
+			filteredItemCount = viewModel.length;
+
+			if (viewSettings.limitTo && viewSettings.limitTo.limit !== 0) {
+				if (viewSettings.limitTo.begin) {
+					if (viewSettings.limitTo.begin >= filteredItemCount) {
+						viewSettings.limitTo.begin = 0;
+					}
+
+					viewModel = viewModel.slice(viewSettings.limitTo.begin, viewModel.length);
+				}
+
+				viewModel = limitToFilter(viewModel, viewSettings.limitTo.limit);
+			}
+		}
+
+		this.setModel = function (newModel) {
+			originalModel = newModel;
+			updateFilters();
 		};
 
-		/**
-		 * Gets the data provider of the grid with a given ID.
-		 * @param {String} id - ID of the grid.
-		 * @returns {Object} Data provider of the grid.
-		 */
-		this.getDataProvider = function getDataProvider(id) {
-			return dataProviders[id];
+		this.getGridModel = function () {
+			return viewModel;
 		};
 
-		/**
-		 * Registers the grid in the service.
-		 * This method is not intended for public use.
-		 *
-		 * @param {String} id - ID of the grid
-		 * @param {Object} controller - Controller to register.
-		 * @private
-		 */
-		this.registerGrid = function registerGrid(id, controller) {
-			grids[id] = controller;
+		this.getModelItemCount = function () {
+			return filteredItemCount;
 		};
 
-		/**
-		 * Unregisters the grid from the service.
-		 * This method is not intended for public use.
-		 *
-		 * @param {String} id - ID of the grid
-		 * @private
-		 */
-		this.unregisterGrid = function unregisterGrid(id) {
-			delete grids[id];
+		this.getCurrentViewSettings = function () {
+			return viewSettings;
 		};
 
-		/**
-		 * Registers the data provider in the service.
-		 * This method is not intended for public use.
-		 *
-		 * @param {String} id - ID of the grid
-		 * @param {Object} controller - Data provider controller to register.
-		 * @private
-		 */
-		this.registerDataProvider = function registerDataProvider(id, controller) {
-			dataProviders[id] = controller;
+		this.saveModel = function () {
 		};
 
-		/**
-		 * Unregisters the data provider of a grid with a given ID from the service.
-		 * This method is not intended for public use.
-		 *
-		 * @param {String} id - ID of the grid
-		 * @private
-		 */
-		this.unregisterGrid = function unregisterGrid(id) {
-			delete dataProviders[id];
-		};
-	}]);
+		this.orderBy = function (expression, reverse) {
+			viewSettings.orderBy = {
+				expression: expression,
+				reverse: reverse
+			};
 
-	;/* global grid */
+			updateFilters();
+		};
+
+		this.limitTo = function (limit, begin) {
+			if (limit === undefined || limit === null) {
+				viewSettings.limitTo = null;
+			} else {
+				viewSettings.limitTo = {
+					limit: limit,
+					begin: begin || 0
+				};
+			}
+
+			updateFilters();
+		};
+
+		this.page = function (pageIndex) {
+			if (viewSettings.limitTo && viewSettings.limitTo.limit) {
+				viewSettings.limitTo.begin = viewSettings.limitTo.limit * pageIndex;
+			}
+
+			updateFilters();
+		};
+
+		this.filter = function (expression, comparator) {
+			viewSettings.filter = {
+				expression: expression,
+				comparator: comparator
+			};
+
+			updateFilters();
+		};
+
+		this.reset = function () {
+			viewSettings = angular.copy(defaultViewSettings);
+			updateFilters();
+		};
+
+		this.reset();
+	}
+
+	angular.module("lightGridDataProviders").provider("lgLocalDataProviderFactory", function () {
+
+		var self = this;
+
+		this.defaultViewSettings = {
+			orderBy: null,
+			limitTo: null,
+			filter: null
+		};
+
+		this.$get = ["filterFilter", "orderByFilter", "limitToFilter", function (filterFilter, orderByFilter, limitToFilter) {
+			return {
+				create: function (localModel) {
+					return new LocalDataProvider(localModel, filterFilter, orderByFilter, limitToFilter, self.defaultViewSettings);
+				}
+			};
+		}];
+	});
+
+
+	angular.module("lightGridControls", ["lightGrid"]);
+
+
+	angular.module("lightGridControls").directive("lgPager", function () {
+		"use strict";
+
+		return {
+			scope: {
+				provider: "="
+			},
+			template: "<div class='pager'>" +
+				"<button ng-disabled='isFirst' class='first' ng-click='goToFirst()'>Last</button>" +
+				"<button ng-disabled='isFirst' class='previous' ng-click='goToPrevious()'>Previous</button>" +
+				"<span class='pager-summary'>Page {{currentPage + 1}} of {{pageCount}}</span>" +
+				"<button ng-disabled='isLast' class='next' ng-click='goToNext()'>Next</button>" +
+				"<button ng-disabled='isLast' class='last' ng-click='goToLast()'>Last</button>" +
+				"</div>",
+			link: function ($scope) {
+				var DEFAULT_PAGE_SIZE = 10;
+
+				function calculateCurrentPage(currentIndex, pageSize) {
+					return Math.floor(currentIndex / (pageSize || DEFAULT_PAGE_SIZE));
+				}
+
+				function calculatePageCount(pageSize, totalSize) {
+					return Math.ceil(totalSize / (pageSize || DEFAULT_PAGE_SIZE));
+				}
+
+				function update(limitToSettings) {
+					var totalItemCount = $scope.provider.getModelItemCount();
+
+					if (!limitToSettings) {
+						$scope.currentPage = 0;
+						$scope.pageCount = 1;
+					} else {
+						$scope.currentPage = calculateCurrentPage(limitToSettings.begin, limitToSettings.limit);
+						$scope.pageCount = calculatePageCount(limitToSettings.limit, totalItemCount);
+					}
+
+					$scope.isFirst = $scope.currentPage <= 0;
+					$scope.isLast = $scope.currentPage >= $scope.pageCount - 1;
+				}
+
+				$scope.$watch("provider.getCurrentViewSettings().limitTo", function (limitToSettings) {
+					update(limitToSettings);
+				}, true);
+
+				$scope.$watch("provider.getModelItemCount()", function () {
+					update($scope.provider.getCurrentViewSettings().limitTo);
+				});
+
+				$scope.goToFirst = function () {
+					$scope.provider.page(0);
+				};
+
+				$scope.goToPrevious = function () {
+					$scope.provider.page($scope.currentPage - 1);
+				};
+
+				$scope.goToNext = function () {
+					$scope.provider.page($scope.currentPage + 1);
+				};
+
+				$scope.goToLast = function () {
+					$scope.provider.page($scope.pageCount - 1);
+				};
+			}
+		};
+	});
+
 
 	/**
 	 * Directive persisting data from the viewModel of the row.
 	 */
-	grid.module.directive("persistData", ["$q", "$rootScope", "lgGridService", function ($q, $rootScope, lgGridService) {
+	angular.module("lightGridControls").directive("persistData", ["$q", function ($q) {
 		"use strict";
 
 		return {
-			link: function (scope, elem) {
-				elem.on("click", function () {
+			link: function ($scope, $elem, $params) {
+				$elem.on("click", function () {
 
-					var gridId = scope.gridController.getId();
-					var dataProvider = lgGridService.getDataProvider(gridId);
+					var dataProvider = $scope.$eval($params.provider);
 
-					$q.when(dataProvider.updateRecords(scope.viewData))
+					$q.when(dataProvider.saveModel($scope.viewData))
 						.then(function () {
-							scope.rowController.acceptViewModel();
-							scope.rowController.switchView("read");
-
-							if (!scope.$$phase && !$rootScope.$$phase) {
-								scope.$apply();
-							}
+							$scope.rowController.acceptViewModel();
+							$scope.rowController.switchView("read");
 						});
 				});
 			}
 		};
 	}]);
 
-	;/* global grid */
 
 	/**
 	 * Enables sorting data by a column specified by the sort-property attribute
 	 * This directive is meant to be used in header template.
 	 */
-	grid.module.directive("lgSorter", ["lgGridService", "$rootScope", function (lgGridService, $rootScope) {
+	angular.module("lightGridControls").directive("lgSorter", ["$timeout", function ($timeout) {
 		"use strict";
 
 		return {
-			template: "<span class='sorter {{ cssClass() }}'><span ng-transclude class='columnTitle'></span></span>",
+			template: "<span class='sorter {{ cssClass }}'><span ng-transclude class='columnTitle'></span></span>",
 			transclude: true,
 			replace: true,
+			scope: true,
 			link: function (scope, elem, attrs) {
-				var gridId = scope.gridController.getId();
 				var sortProperty = attrs.sortProperty || attrs.lgSorter;
+				var dataProvider = scope.$eval(attrs.provider);
+
+				scope.dataProvider = dataProvider;
+
+				function updateCssClass() {
+					if (!scope.isSorted) {
+						scope.cssClass = "";
+					} else {
+						scope.cssClass = scope.sortDirectionDescending ? "sorter-desc" : "sorter-asc";
+					}
+				}
 
 				scope.isSorted = false;
 				scope.sortDirectionDescending = true;
 
 				elem.on("click", function () {
-					var dataProvider = lgGridService.getDataProvider(gridId);
-					dataProvider.sort(sortProperty, !scope.sortDirectionDescending);
+					$timeout(function () {
+						dataProvider.orderBy(sortProperty, !scope.sortDirectionDescending);
+					});
 				});
 
-				scope.$on("lightGrid.dataUpdated", function (event, sortedGridId, gridProperties) {
-					if (gridId !== sortedGridId) {
-						return;
-					}
-
-					var sortOptions = gridProperties.viewOptions;
-
-					if (sortOptions.sortProperty !== sortProperty) {
+				scope.$watch("dataProvider.getCurrentViewSettings().orderBy", function (sortSettings) {
+					if (!sortSettings) {
 						scope.isSorted = false;
 						scope.sortDirectionDescending = true;
 					} else {
-						scope.isSorted = true;
-						scope.sortDirectionDescending = sortOptions.sortDirectionDescending;
+						scope.isSorted = sortProperty === sortSettings.expression;
+						scope.sortDirectionDescending = scope.isSorted ? sortSettings.reverse : true;
 					}
 
-					if (!scope.$$phase && !$rootScope.$$phase) {
-						scope.$digest();
-					}
+					updateCssClass();
 				});
-
-				scope.cssClass = function () {
-					if (!scope.isSorted) {
-						return "";
-					}
-
-					return scope.sortDirectionDescending ? "sorter-desc" : "sorter-asc";
-				};
 			}
 		};
 	}]);
 
-	;/* global grid */
 
 	/**
 	 * Allows to change a view mode of the row.
 	 * Can only be used as an attribute. Its value specifies name of the target view mode.
 	 */
-	grid.module.directive("switchView", function () {
+	angular.module("lightGridControls").directive("switchView", function () {
 		"use strict";
 
 		return {
@@ -899,14 +1066,13 @@
 		};
 	});
 
-	;/* global grid */
 
 	/**
 	 * Opens or closes the expanded view of the row.
 	 * This can be only used as an attribute . It's value specifies the name of the template
 	 * used as an expanded row content.
 	 */
-	grid.module.directive("lgToggleExpandedRow", function () {
+	angular.module("lightGridControls").directive("lgToggleExpandedRow", function () {
 		"use strict";
 
 		return {
@@ -925,325 +1091,5 @@
 		};
 	});
 
-	;/* global grid */
-
-	/**
-	 * Simple read-only column bound to a model's property
-	 */
-	grid.module.directive("lgBoundColumn", function () {
-		"use strict";
-
-		var template = "<lg-column>{{rowData['{property}']}}</lg-column>";
-
-		return {
-			restrict: "EA",
-			template: function (elem, attrs) {
-				return template.replace("{property}", attrs.property);
-			},
-			replace: true
-		};
-	});
-
-	;/* global grid */
-
-	/**
-	 * Simple editable column. Renders either a property value or a text input bound to a property,
-	 * depending on a view mode ("edit" for edit mode, any other for read-only mode)
-	 */
-	grid.module.directive("lgEditableColumn", function () {
-		"use strict";
-
-		var template = "<lg-column><lg-view>{{rowData[\"{property}\"]}}</lg-view><lg-view view='edit'>" +
-			"<input type='text' ng-model='viewData[\"{property}\"]' class='form-control input-sm' /></lg-view></lg-column>";
-
-		return {
-			restrict: "EA",
-			template: function (elem, attrs) {
-				return template.replace(/\{property\}/g, attrs.property);
-			},
-			replace: true
-		};
-	});
-
-	;/* global grid */
-
-	/**
-	 * Simple sortable column bound to a model's property
-	 */
-	grid.module.directive("lgSortableColumn", function () {
-		"use strict";
-
-		var template = "<lg-column><lg-header-view><span lg-sorter sort-property='{property}'>{{ {title} }}</span></lg-header-view><lg-view>{{rowData['{property}']}}</lg-view></lg-column>";
-
-		return {
-			restrict: "EA",
-			template: function (elem, attrs) {
-				return template.replace(/\{property\}/g, attrs.property).replace(/\{title\}/g, attrs.title);
-			},
-			replace: true
-		};
-	});
-
-	;/* global grid, angular */
-
-	/**
-	 * Customizable data provider.
-	 * Attributes:
-	 *  - get-method (function(options)) - method called when the provider need new data. The options parameter contain the view options (filter, paging ans sorting)
-	 *  - add-method (function(record)) - method called when the provider wants to save a new resource
-	 *  - update-method (function(records)) - method called when the provider wants to update existing resources
-	 *  - delete-method(function(record)) - method called when the provider wants to delete an existing resource
-	 *  - initial-options (interpolated, optional) - an object containing the initial view options (search, sorting, paging)
-	 */
-	grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScope", "$timeout", function (lgGridService, $q, $rootScope, $timeout) {
-		"use strict";
-
-		var defaultOptions = {
-			sortProperty: null,
-			sortDirectionDescending: false,
-			pageNumber: null,
-			pageSize: null,
-			filter: null
-		};
-
-		function updateGridModel(modelPromise, scope) {
-			// modelPromise may be either a promise or an actual object, so we have to wrap it in
-			// $q.when() to make sure it's a promise.
-			$q.when(modelPromise).then(function (model) {
-				var gridController = lgGridService.getGridController(scope.gridId);
-
-				if (model && model.data) {
-					gridController.setData(model.data);
-				} else {
-					gridController.setData({ data: [] });
-				}
-
-				if (!scope.$$phase && !$rootScope.$$phase) {
-					scope.$apply();
-				}
-			});
-		}
-
-		var customDataProviderController = ["$scope", function CustomDataProviderController($scope) {
-			this.sort = function (sortProperty, descending) {
-				var properties = angular.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
-				updateGridModel($scope.getMethod({ options: properties }, $scope));
-			};
-
-			this.changePage = function (pageNumber, pageSize) {
-				var properties = angular.extend($scope.displayedDataProperties, { pageNumber: pageNumber, pageSize: pageSize });
-				updateGridModel($scope.getMethod({ options: properties }, $scope));
-			};
-
-			this.filter = function (filter) {
-				var properties = angular.extend($scope.displayedDataProperties, { filter: filter, pageNumber: 1 });
-				updateGridModel($scope.getMethod({ options: properties }, $scope));
-			};
-
-			this.updateRecords = function (records) {
-				return $q.when($scope.updateMethod({ records: records }));
-			};
-
-			this.addRecord = function (record) {
-				return $q.when($scope.addMethod({ record: record }));
-			};
-
-			this.deleteRecord = function (record) {
-				return $q.when($scope.deleteMethod({ record: record }));
-			};
-		}];
-
-		return {
-			scope: {
-				getMethod: "&",
-				addMethod: "&",
-				updateMethod: "&",
-				deleteMethod: "&",
-				initialOptions: "=?"
-			},
-			restrict: "EA",
-			require: "^?lightGrid",
-			controllerAs: "controller",
-			controller: customDataProviderController,
-			link: function (scope, elem, attrs, gridController) {
-				// TODO: this looks quite error-prone
-				if (!gridController && !attrs.gridId) {
-					throw Error("lgCustomDataProvider has no associated grid.");
-				}
-
-				scope.gridId = gridController ? gridController.getId() : attrs.gridId;
-
-				lgGridService.registerDataProvider(scope.gridId, scope.controller);
-				scope.displayedDataProperties = angular.extend({}, defaultOptions, scope.initialOptions);
-
-				elem.remove();
-
-				$timeout(function () {
-					var modelPromise = scope.getMethod({ options: scope.displayedDataProperties });
-					updateGridModel(modelPromise, scope);
-				});
-			}
-		};
-	}]);
-
-	;/* global grid, angular */
-
-	/**
-	 * Data provider to be used with a local array as a model.
-	 * Attributes:
-	 *  - model (interpolated) - an array with a data model to display
-	 *  - initial-options (interpolated, optional) - an object containing the initial view options (search, sorting, paging)
-	 */
-	grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$rootScope", function (lgGridService, $filter, $rootScope) {
-		"use strict";
-
-		var defaultOptions = {
-			sortProperty: null,
-			sortDirectionDescending: false,
-			pageNumber: 1,
-			pageSize: null,
-			filter: null
-		};
-
-		/**
-		 * Filters the input array according to specified criteria.
-		 * @param {Array} model - model to filter
-		 * @param {object} options - filtering criteria
-		 * @returns {{model: Array, recordCount: Number}}
-		 */
-		function applyFilters(model, options) {
-			var viewModel = model;
-
-			if (options.filter) {
-				var filter = $filter("filter");
-				viewModel = filter(viewModel, options.filter);
-			}
-
-			// recordCount stores the number of results after filtering but before paging
-			var recordCount = viewModel.length;
-
-			if (options.sortProperty) {
-				var orderBy = $filter("orderBy");
-				viewModel = orderBy(viewModel, options.sortProperty, options.sortDirectionDescending);
-			}
-
-			if (options.pageNumber && options.pageSize) {
-				var startIndex = (options.pageNumber - 1) * options.pageSize;
-				var endIndex = startIndex + options.pageSize;
-
-				viewModel = viewModel.slice(startIndex, endIndex);
-			}
-
-			return {
-				model: viewModel,
-				recordCount: recordCount
-			};
-		}
-
-		function updateGridModel(scope) {
-			var gridController = lgGridService.getGridController(scope.gridId);
-			var modelInfo = applyFilters(scope.model, scope.displayedDataProperties);
-			scope.viewModel = modelInfo.model;
-
-			gridController.setData(scope.viewModel);
-
-			// notifying other components that the displayed data may have changed
-			$rootScope.$broadcast("lightGrid.dataUpdated", scope.gridId, {
-				model: scope.model,
-				recordCount: modelInfo.recordCount,
-				viewOptions: scope.displayedDataProperties
-			});
-
-			if (!scope.$$phase && !$rootScope.$$phase) {
-				scope.$apply();
-			}
-		}
-
-		var localDataProviderController = ["$scope", "$q", function ($scope, $q) {
-			this.getViewProperties = function () {
-				return $scope.displayedDataProperties;
-			};
-
-			this.sort = function (sortProperty, descending) {
-				angular.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
-				updateGridModel($scope);
-			};
-
-			this.changePage = function (pageNumber, pageSize) {
-				angular.extend($scope.displayedDataProperties, { pageNumber: pageNumber, pageSize: pageSize });
-				updateGridModel($scope);
-			};
-
-			this.filter = function (filter) {
-				angular.extend($scope.displayedDataProperties, { filter: filter, pageNumber: 1 });
-				updateGridModel($scope);
-			};
-
-			this.updateRecords = function () {
-				// local model is updated immediately, so nothing to do here
-			};
-
-			this.addRecord = function (record) {
-				var deferred = $q.defer();
-
-				$scope.model.push(record);
-
-				deferred.resolve();
-				return deferred.promise;
-			};
-
-			this.deleteRecord = function (record) {
-				var deferred = $q.defer();
-				var deleteIndex = null;
-
-				for (var i = 0; i < $scope.model.length; ++i) {
-					if ($scope.model[i] === record) {
-						deleteIndex = i;
-						break;
-					}
-				}
-
-				if (deleteIndex !== null) {
-					$scope.model.splice(deleteIndex, 1);
-					deferred.resolve();
-				} else {
-					deferred.reject();
-				}
-
-				return deferred.promise;
-			};
-		}];
-
-		return {
-			scope: {
-				model: "=",
-				initialOptions: "=?"
-			},
-			restrict: "EA",
-			require: "^?lightGrid",
-			controllerAs: "controller",
-			controller: localDataProviderController,
-			link: function (scope, elem, attrs, gridController) {
-				if (!gridController && !attrs.gridId) {
-					throw Error("lgLocalDataProvider has no associated grid.");
-				}
-
-				scope.gridId = gridController ? gridController.getId() : attrs.gridId;
-
-				scope.displayedDataProperties = angular.extend({}, defaultOptions, scope.initialOptions);
-
-				scope.$watch("model", function () {
-					updateGridModel(scope);
-				});
-
-				scope.$watchCollection("model", function () {
-					updateGridModel(scope);
-				});
-
-				lgGridService.registerDataProvider(scope.gridId, scope.controller);
-				elem.remove();
-			}
-		};
-	}]);
 
 }(window, window.angular, window.jQuery));

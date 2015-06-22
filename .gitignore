@@ -3,3 +3,4 @@ Web/bin/
 Web/obj/
 packages/
 *.user
+.vs/
