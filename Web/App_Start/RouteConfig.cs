@@ -7,6 +7,9 @@ namespace Web
 	{
 		public static void RegisterRoutes(RouteCollection routes)
 		{
+			routes.LowercaseUrls = true;
+			routes.AppendTrailingSlash = false;
+
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
 			routes.MapRoute("Demos", "Demos/{viewName}", new { controller = "Demos", action = "Partial" });
