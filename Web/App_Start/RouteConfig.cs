@@ -13,6 +13,7 @@ namespace Web
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
 			routes.MapRoute("Demos", "Demos/{viewName}", new { controller = "Demos", action = "Partial" });
+			routes.MapRoute("Docs", "Docs/{*viewName}", new { controller = "Docs", action = "Partial" });
 			routes.MapRoute("Default", "{action}", new { controller = "Home", action = "Index" });
 		}
 	}

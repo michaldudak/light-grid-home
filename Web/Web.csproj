@@ -104,6 +104,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\DemosController.cs" />
+    <Compile Include="Controllers\DocsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -122,6 +123,7 @@
     <Content Include="Data\zips.json" />
     <None Include="Properties\PublishProfiles\light-grid.digitalcreations.pl - Web Deploy.pubxml" />
     <Content Include="Scripts\demoApp.js" />
+    <Content Include="Scripts\docs.js" />
     <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\light-grid.js" />
     <Content Include="Scripts\_references.js" />
@@ -150,6 +152,8 @@
     <Content Include="Views\Demos\clientSidePaging.cshtml" />
     <Content Include="Views\Demos\fullyFeaturedLocal.cshtml" />
     <Content Include="Views\Demos\hiddenColumns.cshtml" />
+    <Content Include="Views\Docs\lightGrid\lightGrid.cshtml" />
+    <Content Include="Views\Docs\lightGrid\lgColumn.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

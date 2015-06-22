@@ -2,5 +2,24 @@
 	ViewBag.Title = "API documentation";
 }
 <h1>API documentation</h1>
+<p>Still in progress...</p>
+<div class="row" ng-app="lightGridDocs">
+	<div class="col-md-3">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<ul class="nav nav-stacked">
+					<li><a href="#/lightGrid/lightGrid">lightGrid</a></li>
+					<li><a href="#/lightGrid/lgColumn">lgColumn</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<div data-ng-view></div>
+	</div>
+</div>
 
-<p>Lorem ipsum dolor sit amet...</p>
+@section scripts
+{
+	<script src="~/Scripts/docs.js"></script>
+}

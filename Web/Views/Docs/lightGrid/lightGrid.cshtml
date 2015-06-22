@@ -1,0 +1,40 @@
+﻿<h2><code>lightGrid</code> directive</h2>
+
+<p>
+	The <code>lightGrid</code> is the main directive. It is used to define a grid. Configuration is done via its subdirectives.
+	It can be used either as a custom tag or on a <code>table</code> tag.
+</p>
+
+<h3>Attributes</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Attribute</th>
+			<th>Type</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>model</td>
+			<td>object array</td>
+			<td>Provides the model to display.</td>
+		</tr>
+		<tr>
+			<td>initialView</td>
+			<td>string</td>
+			<td>Specifies name of the view the grid will start in.</td>
+		</tr>
+		<tr>
+			<td>id</td>
+			<td>string</td>
+			<td>Specifies an ID of the grid.</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Examples</h3>
+<pre>
+&lt;light-grid model="myModel" id="myGrid"&gt;&lt;/light-grid&gt;
+&lt;table light-grid id="myGrid" model="myModel"&gt;&lt;/table&gt;
+</pre>
