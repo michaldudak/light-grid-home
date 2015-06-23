@@ -1,0 +1,13 @@
+﻿<h2><code>lgColumnTemplates</code> directive</h2>
+<p>Dummy directive to be placed on a row containing column templates (when writing HTML-compliant markup)</p>
+<p>Does not expose any API.</p>
+
+<h3>Examples</h3>
+<pre ng-non-bindable>
+&lt;table data-light-grid id="sampleGrid" data-data="people"&gt;
+	&lt;tr data-column-templates&gt;
+		&lt;td data-lg-column title="'First name'"&gt;{{rowData.firstName}}&lt;/td&gt;
+		&lt;td data-lg-column title="'Last name'"&gt;{{rowData.lastName}}&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+</pre>

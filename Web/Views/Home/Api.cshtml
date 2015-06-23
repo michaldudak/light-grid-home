@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Web.Services.DocumentationFileSources
+@{
 	ViewBag.Title = "API documentation";
 }
 <h1>API documentation</h1>
@@ -8,8 +9,26 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<ul class="nav nav-stacked">
-					<li><a href="#/lightGrid/lightGrid">lightGrid</a></li>
-					<li><a href="#/lightGrid/lgColumn">lgColumn</a></li>
+					<li><strong>Light Grid core</strong></li>
+					@foreach (var page in Model.LightGridDocs)
+					{
+						<li><a href="#/lightGrid/@page">@page</a></li>
+					}
+					<li><strong>Data providers</strong></li>
+					@foreach (var page in Model.DataProvidersDocs)
+					{
+						<li><a href="#/dataProviders/@page">@page</a></li>
+					}
+					<li><strong>Templates</strong></li>
+					@foreach (var page in Model.TemplatesDocs)
+					{
+						<li><a href="#/templates/@page">@page</a></li>
+					}
+					<li><strong>Auxillary controls</strong></li>
+					@foreach (var page in Model.ControlsDocs)
+					{
+						<li><a href="#/controls/@page">@page</a></li>
+					}
 				</ul>
 			</div>
 		</div>

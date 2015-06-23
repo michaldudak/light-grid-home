@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Web.Services;
 
 namespace Web.Controllers
 {
@@ -16,7 +17,8 @@ namespace Web.Controllers
 
 		public ActionResult Api()
 		{
-			return View();
+			var docProvider = new DocumentationFileProvider();
+			return View(docProvider.GetDocumentationFiles());
 		}
 
 		public ActionResult Demos()
