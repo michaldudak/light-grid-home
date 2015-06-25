@@ -5,6 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Light Grid - @ViewBag.Title</title>
+		<link rel="shortcut icon" href="~/favicon.png"/>
 		@Styles.Render("~/Content/css")
 	</head>
 	<body>
@@ -19,7 +20,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					@Html.ActionLink("Light Grid", "Index", "Home", null, new { @class = "navbar-brand" })
+					<a href="@Url.Action("Index", "Home")" class="navbar-brand">Light Grid</a>
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">

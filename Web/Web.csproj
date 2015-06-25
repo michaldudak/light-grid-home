@@ -117,7 +117,8 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\forkme.png" />
-    <Content Include="favicon.ico" />
+    <Content Include="Content\light-grid-logo.png" />
+    <Content Include="favicon.png" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\angular-route.js" />
