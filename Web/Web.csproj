@@ -139,9 +139,7 @@
     <Content Include="Views\Demos\simplest.cshtml" />
     <Content Include="Views\Demos\sortableColumns.cshtml" />
     <Content Include="Views\Docs\lightGrid\lgColumnTemplates.cshtml" />
-    <Content Include="Views\Docs\lightGrid\lgHeaderCell.cshtml" />
     <Content Include="Views\Docs\lightGrid\lgView.cshtml" />
-    <Content Include="Views\Docs\lightGrid\lgCell.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
