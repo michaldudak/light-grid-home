@@ -9,61 +9,66 @@
 		@Styles.Render("~/Content/css")
 	</head>
 	<body>
-		<a href="https://github.com/michaldudak/light-grid">
-			<img style="position: absolute; top: 60px; right: 0; border: 0; z-index: 1001" src="~/Content/forkme.png" alt="Fork me on GitHub">
-		</a>
-		<div class="navbar navbar-default navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a href="@Url.Action("Index", "Home")" class="navbar-brand">Light Grid</a>
-				</div>
-				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						<li>@Html.ActionLink("Home", "Index", "Home")</li>
-						<li>@Html.ActionLink("Overview", "Overview", "Home")</li>
-						<li>@Html.ActionLink("Demos", "Demos", "Home")</li>
-						<li>@Html.ActionLink("Docs", "API", "Home")</li>
-						<li><a href="https://github.com/michaldudak/light-grid/releases">Downloads</a></li>
-					</ul>
-				</div>
+	<a href="https://github.com/michaldudak/light-grid">
+		<img style="position: absolute; top: 60px; right: 0; border: 0; z-index: 1001" src="~/Content/forkme.png" alt="Fork me on GitHub">
+	</a>
+	<div class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="@Url.Action("Index", "Home")" class="navbar-brand">Light Grid</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li>@Html.ActionLink("Home", "Index", "Home")</li>
+					<li>@Html.ActionLink("Overview", "Overview", "Home")</li>
+					<li>@Html.ActionLink("Demos", "Demos", "Home")</li>
+					<li>@Html.ActionLink("Docs", "API", "Home")</li>
+					<li><a href="https://github.com/michaldudak/light-grid/releases">Downloads</a></li>
+				</ul>
 			</div>
 		</div>
-		<div class="container body-content">
-			@RenderBody()
-			<hr />
-			<footer>
-				<p>Light grid is licensed under <a href="https://github.com/michaldudak/light-grid/blob/master/LICENSE">the MIT license</a>.</p>
-				<p>
-					<iframe src="http://ghbtns.com/github-btn.html?user=michaldudak&repo=light-grid&type=watch&count=true"
-					        allowtransparency="true" frameborder="0" scrolling="0" width="85" height="20"></iframe>
-					<iframe src="http://ghbtns.com/github-btn.html?user=michaldudak&repo=light-grid&type=fork&count=true"
-					        allowtransparency="true" frameborder="0" scrolling="0" width="85" height="20"></iframe>
-					<iframe src="http://ghbtns.com/github-btn.html?user=michaldudak&repo=light-grid&type=follow&count=true"
-					        allowtransparency="true" frameborder="0" scrolling="0" width="160" height="20"></iframe>
-				</p>
-				<p>
-					This website is licensed under <a href="https://github.com/michaldudak/light-grid-home/blob/master/LICENSE">the MIT license</a>. <a href="https://github.com/michaldudak/light-grid-home">Contributions are welcome!</a>
-				</p>
-				<p>Using <a href="https://bootswatch.com/flatly">Flatly theme from Bootswatch</a>.</p>
-				<p><small>&copy; @DateTime.Now.Year - <a href="http://dudak.me">Michał Dudak</a> | <a href="http://digitalcreations.pl">Digital Creations</a></small></p>
-			</footer>
-		</div>
+	</div>
+	<div class="container body-content">
+		@RenderBody()
+		<hr />
+		<footer>
+			<p>Light grid is licensed under <a href="https://github.com/michaldudak/light-grid/blob/master/LICENSE">the MIT license</a>.</p>
+			<p>
+				<iframe src="http://ghbtns.com/github-btn.html?user=michaldudak&repo=light-grid&type=watch&count=true"
+						allowtransparency="true" frameborder="0" scrolling="0" width="85" height="20"></iframe>
+				<iframe src="http://ghbtns.com/github-btn.html?user=michaldudak&repo=light-grid&type=fork&count=true"
+						allowtransparency="true" frameborder="0" scrolling="0" width="85" height="20"></iframe>
+				<iframe src="http://ghbtns.com/github-btn.html?user=michaldudak&repo=light-grid&type=follow&count=true"
+						allowtransparency="true" frameborder="0" scrolling="0" width="160" height="20"></iframe>
+			</p>
+			<p>
+				This website is licensed under <a href="https://github.com/michaldudak/light-grid-home/blob/master/LICENSE">the MIT license</a>. <a href="https://github.com/michaldudak/light-grid-home">Contributions are welcome!</a>
+			</p>
+			<p>Using <a href="https://bootswatch.com/flatly">Flatly theme from Bootswatch</a>.</p>
+			<p><small>&copy; @DateTime.Now.Year - <a href="http://dudak.me">Michał Dudak</a> | <a href="http://digitalcreations.pl">Digital Creations</a></small></p>
+		</footer>
+	</div>
 
-		@Scripts.Render("~/bundles/libraries")
-		@RenderSection("scripts", required: false)
+	@Scripts.Render("~/bundles/libraries")
+	@RenderSection("scripts", required: false)
+	@if (!Request.IsLocal)
+	{
 		<script>
-			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+			(function (i, s, o, g, r, a, m) {
+				i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+					(i[r].q = i[r].q || []).push(arguments)
+				}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+			})(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
 			ga('create', 'UA-7864701-19', 'auto');
 			ga('send', 'pageview');
 		</script>
+	}
 	</body>
 </html>
