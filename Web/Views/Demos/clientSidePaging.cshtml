@@ -18,10 +18,12 @@
 <div ng-controller="clientSidePagingController">
 	<lg-pager data-provider="dataProvider"></lg-pager>
 
-	<table light-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
+	<table lg-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
 		<tr lg-column-templates>
 			<td lg-column title="'ID'">{{ rowData.id }}</td>
 			<td lg-column title="'Name'">{{ rowData.name }}</td>
 		</tr>
 	</table>
+
+	<lg-pager data-provider="dataProvider"></lg-pager>
 </div>

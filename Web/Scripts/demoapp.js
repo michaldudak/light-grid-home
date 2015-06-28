@@ -1,7 +1,7 @@
 ﻿(function (window, ng) {
 	"use strict";
 
-	var app = ng.module("lightGridSamples", ["lightGrid", "lightGridTemplates", "lightGridDataProviders", "lightGridControls", "ngRoute"]);
+	var app = ng.module("lightGridSamples", ["lightGrid", "lightGridTemplates", "lightGridDataProviders", "lightGridControls", "ngRoute", "ngResource"]);
 	window.app = app;
 
 	app.config(function ($routeProvider, $controllerProvider, $compileProvider) {
@@ -37,6 +37,9 @@
 			.when("/fully-featured-local", {
 				templateUrl: "Demos/fullyFeaturedLocal"
 			})
+			.when("/server-side-processing", {
+				templateUrl: "Demos/serverSideProcessing"
+			})
 			.otherwise({
 				redirectTo: "/simplest"
 			});
@@ -65,5 +68,21 @@
 			engine: "998ccm R4 supercharged"
 		}
 	]);
+
+	app.factory("Zip", function($resource) {
+		return $resource("/Demos/SampleData", null, {
+			query: {
+				action: "GET",
+				isArray: true,
+				transformResponse: function(data) {
+					var parsedResponse = JSON.parse(data);
+					var parsedData = parsedResponse.data;
+					parsedData.totalRecords = parsedResponse.totalRecords;
+
+					return parsedData;
+				}
+			}
+		});
+	});
 
 }(window, window.angular));

@@ -151,3 +151,17 @@ pre {
 	margin: 0 5px;
 	display: inline-block;
 }
+
+.page-size {
+	text-align: center;
+}
+
+.page-size select {
+	display: inline-block;
+	width: 100px;
+}
+
+.page-size:before {
+	content: "Page size";
+	margin-right: 4px;
+}

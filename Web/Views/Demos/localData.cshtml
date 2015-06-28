@@ -7,7 +7,7 @@
 <h2>Grid with a local data provider</h2>
 
 <div ng-controller="localDataGridController">
-	<table light-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
+	<table lg-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
 		<tr lg-column-templates>
 			<td lg-column title="'Make'">{{ rowData.make }}</td>
 			<td lg-column title="'Model'">{{ rowData.model }}</td>

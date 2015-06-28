@@ -8,7 +8,7 @@
 <h2>Editable row with local data provider</h2>
 
 <div ng-controller="localEditableRowController">
-	<table light-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
+	<table lg-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
 		<tr lg-column-templates>
 			<td lg-column title="'Make'" width="28%">
 				<div lg-view>{{ rowData.make }}</div>

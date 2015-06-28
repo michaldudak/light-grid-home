@@ -107,6 +107,8 @@
     <Compile Include="Controllers\DocsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\ZipSorter.cs" />
+    <Compile Include="Models\Zip.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -175,6 +177,7 @@
     <Content Include="Views\Docs\templates\lgEditableColumn.cshtml" />
     <Content Include="Views\Docs\templates\lgSortableColumn.cshtml" />
     <Content Include="Views\Docs\dataProviders\lgLocalDataProviderFactory.cshtml" />
+    <Content Include="Views\Demos\serverSideProcessing.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
