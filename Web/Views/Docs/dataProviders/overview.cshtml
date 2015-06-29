@@ -1,0 +1,73 @@
+﻿<h2>Data providers overview</h2>
+<p>
+	Data providers are the bridge between the grid and the data source. Since the grid's job is just displaying data, it is the responsibility of the provider to prepare the display model.
+</p>
+<p>
+	The grid itself does not know anything about the provider (the opposite is also true). They communicate via the following binding (assuming the provider is registered on the scope):
+</p>
+<pre>
+&lt;lg-grid model="dataProvider.getGridModel()"&gt;&lt;/lg-grid&gt;
+</pre>
+<h3>Data provider anatomy</h3>
+<p>
+	The provider has to communicate with the grid and possibly other controls that modify the data set. To be compatible with the <code>lgGrid</code>
+	and controls from <code>lightGridControls</code> module, the provider needs to implement the following methods:
+</p>
+<dl>
+	<dt>getGridModel()</dt>
+	<dd>Returns data (an array of objects) to be displayed by the grid.</dd>
+
+	<dt>getModelItemCount()</dt>
+	<dd>Returns a number of total results (after filtering but before paging). This may be useful to determine the number of pages to display.</dd>
+
+	<dt>getCurrentViewSettings()</dt>
+	<dd>
+		Gets the currently applied view settings. The returned object has the following form:
+		<ul>
+			<li>
+				<code>limitTo</code> - paging settings
+				<ul>
+					<li><code>limit</code> - (Number) page size</li>
+					<li><code>begin</code> - (Number) index of the first returned record</li>
+				</ul>
+			</li>
+			<li>
+				<code>orderBy</code> - ordering settings
+				<ul>
+					<li><code>expression</code> - (String) field name to order by</li>
+					<li><code>reverse</code> - (Boolean) determines if results should be returned in reverse order</li>
+				</ul>
+			</li>
+			<li>
+				<code>filter</code> - filtering settings
+				<ul>
+					<li><code>expression</code> - (String) phrase to search for</li>
+				</ul>
+			</li>
+		</ul>
+	</dd>
+
+	<dt>saveModel(model)</dt>
+	<dd>Persists the provided model. This may not be applicable to all types of providers.</dd>
+
+	<dt>orderBy(expression, reverse)</dt>
+	<dd>Sorts the data by the field specified in the <code>expression</code> parameter.</dd>
+
+	<dt>limitTo(limit, begin)</dt>
+	<dd>Limits the amount of displayed data. The <code>limit</code> parameter specifies the number of rows to display. <code>begin</code> represents the index of the first item to be shown.</dd>
+
+	<dt>filter(expression)</dt>
+	<dd>Returns just the records that match the specified search criteria.</dd>
+</dl>
+
+<h3>Creating a provider</h3>
+<p>
+	Each type of provider may be created in a different way. The built-in ones are instantiated with the help of factories.
+	See the individual factories' descriptions for more details.
+</p>
+<p>
+	To use a provider, a dependency to the <code>lightGridDataProviders</code> module must be set in the application module definition.
+</p>
+<pre>
+angular.module("myApp", ["lightGrid", "lightGridDataProviders"]);
+</pre>

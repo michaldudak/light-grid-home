@@ -165,3 +165,7 @@ pre {
 	content: "Page size";
 	margin-right: 4px;
 }
+
+dd {
+	margin-bottom: 1em;
+}

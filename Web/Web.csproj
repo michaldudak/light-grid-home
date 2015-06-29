@@ -140,6 +140,7 @@
     <Content Include="Views\Demos\localEditableRow.cshtml" />
     <Content Include="Views\Demos\simplest.cshtml" />
     <Content Include="Views\Demos\sortableColumns.cshtml" />
+    <None Include="Views\Docs\dataProviders\overview.cshtml" />
     <Content Include="Views\Docs\lightGrid\lgColumnTemplates.cshtml" />
     <Content Include="Views\Docs\lightGrid\lgHeaderCell.cshtml" />
     <Content Include="Views\Docs\lightGrid\lgView.cshtml" />
@@ -178,6 +179,7 @@
     <Content Include="Views\Docs\templates\lgSortableColumn.cshtml" />
     <Content Include="Views\Docs\dataProviders\lgLocalDataProviderFactory.cshtml" />
     <Content Include="Views\Demos\serverSideProcessing.cshtml" />
+    <Content Include="Views\Docs\dataProviders\lgServerDataProviderFactory.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
