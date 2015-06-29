@@ -1,1 +1,15 @@
 ﻿<h2><code>lgLocalDataProviderFactory</code> service</h2>
+<p>Provides a way to create a <a href="@Url.Action("Api", "Home")#/dataProviders/LocalDataProvider">LocalDataProvider</a> instance.</p>
+
+<h3>Methods</h3>
+<dl>
+	<dt>create(data)</dt>
+	<dd>Creates a new <code>LocalDataProvider</code> fed by the provided data. The <code>data</code> parameter should be an array of objects.</dd>
+</dl>
+
+<h3>Examples</h3>
+<pre>
+angular.module("myApp").controller("gridController", function($scope, lgServerDataProviderFactory) {
+	$scope.dataProvider = lgServerDataProviderFactory.create("/api/things");
+});
+</pre>

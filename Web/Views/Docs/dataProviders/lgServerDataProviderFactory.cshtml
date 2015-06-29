@@ -1,1 +1,43 @@
 ﻿<h2><code>lgServerDataProviderFactory</code> service</h2>
+<p>Provides a way to create a <a href="@Url.Action("Api", "Home")#/dataProviders/ServerDataProvider">ServerDataProvider</a> instance.</p>
+
+<h3>Methods</h3>
+<dl>
+	<dt>create(resourceUrl)</dt>
+	<dd>Creates a new <code>ServerDataProvider</code> connected to a remote data source at a specified URL.</dd>
+</dl>
+
+<h3>Remote data source</h3>
+<p>
+	ServerDataProvider expects the remote data seource to respond in a particular format:
+</p>
+<h4>GET</h4>
+<p>
+	Issuing a GET request should return a JSON string representing an object with two properties:
+</p>
+<ul>
+	<li><code>data</code> - (array of objects) the data to display on the grid</li>
+	<li><code>totalResults</code> - (Number) the number of total results found on the server (after the filtering, but before paging)</li>
+</ul>
+
+<p>The server should accept the following parameters in the query string of the GET request:</p>
+<ul>
+	<li><code>search</code> - the expression to filter the results by</li>
+	<li><code>orderBy</code> - the name of the field to order the results by</li>
+	<li><code>reverse</code> - "true" or "false", depending on whether the order should be reversed</li>
+	<li><code>limit</code> - maximal number of results to return</li>
+	<li><code>begin</code> - zero-based index of the first element to return</li>
+</ul>
+
+<h4>POST</h4>
+<p>
+	Issuing a POST request to the URL specified in the <code>resourceUrl</code> parameter should persist the resource.
+	If a given resource already exists, it should be updated.
+</p>
+
+<h3>Examples</h3>
+<pre>
+angular.module("myApp").controller("gridController", function($scope, lgServerDataProviderFactory) {
+	$scope.dataProvider = lgServerDataProviderFactory.create("/api/things");
+});
+</pre>
