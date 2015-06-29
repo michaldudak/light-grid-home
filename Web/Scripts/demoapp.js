@@ -1,7 +1,7 @@
 ﻿(function (window, ng) {
 	"use strict";
 
-	var app = ng.module("lightGridSamples", ["lightGrid", "lightGridTemplates", "lightGridDataProviders", "lightGridControls", "ngRoute", "ngResource"]);
+	var app = ng.module("lightGridSamples", ["lightGrid", "lightGridTemplates", "lightGridDataProviders", "lightGridControls", "ngRoute"]);
 	window.app = app;
 
 	app.config(function ($routeProvider, $controllerProvider, $compileProvider) {
