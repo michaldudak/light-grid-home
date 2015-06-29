@@ -69,20 +69,4 @@
 		}
 	]);
 
-	app.factory("Zip", function($resource) {
-		return $resource("/Demos/SampleData", null, {
-			query: {
-				action: "GET",
-				isArray: true,
-				transformResponse: function(data) {
-					var parsedResponse = JSON.parse(data);
-					var parsedData = parsedResponse.data;
-					parsedData.totalRecords = parsedResponse.totalRecords;
-
-					return parsedData;
-				}
-			}
-		});
-	});
-
 }(window, window.angular));
