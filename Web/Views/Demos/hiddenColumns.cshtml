@@ -7,17 +7,21 @@
 
 <h2>Hidden columns</h2>
 
-<div ng-controller="hiddenColumnGridController">
+<div ng-controller="hiddenColumnGridController" ng-non-bindable>
 	<table lg-grid id="sampleGrid" class="table table-striped" model="model">
-		<tr lg-column-templates>
-			<td lg-column title="'Make'">{{ rowData.make }}</td>
-			<td lg-column title="'Model'">{{ rowData.model }}</td>
-			<td lg-column title="'Engine'" visible="engineColumnVisible">{{ rowData.engine }}</td>
-		</tr>
+		<tbody>
+			<tr lg-column-templates>
+				<td lg-column title="'Make'">{{ rowData.make }}</td>
+				<td lg-column title="'Model'">{{ rowData.model }}</td>
+				<td lg-column title="'Engine'" visible="engineColumnVisible">{{ rowData.engine }}</td>
+			</tr>
+		</tbody>
 	</table>
 	<div class="checkbox">
 		<label>
-			<input type="checkbox" ng-model="engineColumnVisible" /> Show engine data
+			<input type="checkbox" ng-model="engineColumnVisible"/> Show engine data
 		</label>
 	</div>
 </div>
+
+<source-display></source-display>

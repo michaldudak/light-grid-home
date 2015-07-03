@@ -119,6 +119,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\forkme.png" />
+    <Content Include="Content\highlight.css" />
     <Content Include="Content\light-grid-logo.png" />
     <Content Include="favicon.png" />
     <Content Include="Global.asax" />
@@ -131,8 +132,10 @@
     <None Include="Properties\PublishProfiles\light-grid.digitalcreations.pl - Web Deploy.pubxml" />
     <Content Include="Scripts\demoApp.js" />
     <Content Include="Scripts\docs.js" />
+    <Content Include="Scripts\highlight.pack.js" />
     <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\light-grid.js" />
+    <Content Include="Scripts\sourceDisplay.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Demos\clientSideSearch.cshtml" />
     <Content Include="Views\Demos\expandedRow.cshtml" />

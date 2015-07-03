@@ -4,7 +4,7 @@
 	var app = ng.module("lightGridSamples", ["lightGrid", "lightGridTemplates", "lightGridDataProviders", "lightGridControls", "ngRoute"]);
 	window.app = app;
 
-	app.config(function ($routeProvider, $controllerProvider, $compileProvider) {
+	app.config(["$routeProvider", "$controllerProvider", "$compileProvider", function ($routeProvider, $controllerProvider, $compileProvider) {
 
 		$controllerProvider.allowGlobals();
 		$compileProvider.debugInfoEnabled(false);
@@ -43,7 +43,7 @@
 			.otherwise({
 				redirectTo: "/simplest"
 			});
-	});
+	}]);
 
 	app.constant("sampleModel", [
 		{

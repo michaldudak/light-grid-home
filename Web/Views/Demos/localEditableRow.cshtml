@@ -7,39 +7,46 @@
 
 <h2>Editable row with local data provider</h2>
 
-<div ng-controller="localEditableRowController">
+<div ng-controller="localEditableRowController" ng-non-bindable>
 	<table lg-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
-		<tr lg-column-templates>
-			<td lg-column title="'Make'" width="28%">
-				<div lg-view>{{ rowData.make }}</div>
-				<div lg-view="edit"><input ng-model="viewData.make" class="form-control input-sm"/>
-				</div>
-			</td>
+		<tbody>
+			<tr lg-column-templates>
+				<td lg-column title="'Make'" width="28%">
+					<div lg-view>{{ rowData.make }}</div>
+					<div lg-view="edit">
+						<input ng-model="viewData.make" class="form-control input-sm" />
+					</div>
+				</td>
 
-			<td lg-column title="'Model'" width="28%">
-				<div lg-view>{{ rowData.model }}</div>
-				<div lg-view="edit"><input ng-model="viewData.model" class="form-control input-sm"/>
-				</div>
-			</td>
+				<td lg-column title="'Model'" width="28%">
+					<div lg-view>{{ rowData.model }}</div>
+					<div lg-view="edit">
+						<input ng-model="viewData.model" class="form-control input-sm" />
+					</div>
+				</td>
 
-			<td lg-column title="'Engine'" width="28%">
-				<div lg-view>{{ rowData.engine }}</div>
-				<div lg-view="edit"><input ng-model="viewData.engine" class="form-control input-sm"/>
-				</div>
-			</td>
+				<td lg-column title="'Engine'" width="28%">
+					<div lg-view>{{ rowData.engine }}</div>
+					<div lg-view="edit">
+						<input ng-model="viewData.engine" class="form-control input-sm" />
+					</div>
+				</td>
 
-			<td lg-column width="16%">
-				<div lg-view>
-					<button class="btn btn-default btn-sm" lg-switch-view="edit">Edit</button>
-				</div>
-				<div lg-view="edit">
-					<button class="btn btn-primary btn-sm" lg-persist-data data-provider="dataProvider">Save</button>
-					<button class="btn btn-default btn-sm" lg-switch-view="read">Cancel</button>
-				</div>
-			</td>
-		</tr>
+				<td lg-column width="16%">
+					<div lg-view>
+						<button class="btn btn-default btn-sm" lg-switch-view="edit">Edit</button>
+					</div>
+					<div lg-view="edit">
+						<button class="btn btn-primary btn-sm" lg-persist-data data-provider="dataProvider">Save</button>
+						<button class="btn btn-default btn-sm" lg-switch-view="read">Cancel</button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
 	</table>
 
 	<h3>Underlying model</h3>
 	<pre>{{sampleModel | json }}</pre>
 </div>
+
+<source-display></source-display>

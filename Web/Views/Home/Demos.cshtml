@@ -29,8 +29,12 @@
 	</div>
 </div>
 
+@section styles
+{
+	<link rel="stylesheet" href="~/Content/highlight.css"/>
+}
+
 @section scripts
 {
-	<script src="~/Scripts/light-grid.js"></script>
-	<script src="~/Scripts/demoApp.js"></script>
+	@Scripts.Render("~/bundles/samples")
 }

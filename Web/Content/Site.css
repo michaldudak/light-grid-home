@@ -169,3 +169,9 @@ pre {
 dd {
 	margin-bottom: 1em;
 }
+
+.source-display pre {
+	font-size: 80%;
+	-ms-word-wrap: normal;
+	word-wrap: normal;
+}
