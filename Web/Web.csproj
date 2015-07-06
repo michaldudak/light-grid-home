@@ -182,6 +182,7 @@
     <Content Include="Views\Docs\dataProviders\lgServerDataProviderFactory.cshtml" />
     <Content Include="Views\Docs\dataProviders\ServerDataProvider.cshtml" />
     <Content Include="Views\Docs\controls\Overview.cshtml" />
+    <Content Include="Views\Docs\templates\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

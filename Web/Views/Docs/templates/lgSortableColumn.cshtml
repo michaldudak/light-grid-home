@@ -1,1 +1,36 @@
 ﻿<h2><code>lgSortableColumn</code> directive</h2>
+
+<p>
+	Creates a column that contains an <code>lgSorter</code> in the header and thus, can be ordered.
+</p>
+
+<h3>Attributes</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Attribute</th>
+			<th>Type</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>property</td>
+			<td>string</td>
+			<td>Name of the field to bind the column to.</td>
+		</tr>
+		<tr>
+			<td>provider</td>
+			<td>data provider</td>
+			<td>A reference to a data provider the lgSorter will communicate with.</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Examples</h3>
+<pre highlight="html">
+&lt;lg-grid model="dataProvider.getGridModel()"&gt;
+	&lt;lg-sortable-column property="firstName" provider="dataProvider"&gt;&lt;/lg-sortable-column&gt;
+	&lt;lg-sortable-column property="lastName" provider="dataProvider"&gt;&lt;/lg-sortable-column&gt;
+&lt;/lg-grid&gt;
+</pre>

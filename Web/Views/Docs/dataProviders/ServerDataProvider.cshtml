@@ -1,1 +1,43 @@
 ﻿<h2><code>ServerDataProvider</code> object</h2>
+
+<p>This provider takes its data from a remote server via AJAX calls.</p>
+
+<h3>Methods</h3>
+This provider supports all the methods described in the <a href="@Url.Action("Api", "Home")#/dataProviders/overview">data providers overview</a>.
+
+<h3>Properties</h3>
+<dl>
+	<dt>debounceTime</dt>
+	<dd>A number that specifies the requet debounce time (in milliseconds). See below for more details</dd>
+</dl>
+
+<h3>Request debouncing</h3>
+<p>To save bandwidth, this data provider is able to merge several subsequent requests into one.</p>
+<p>
+	If two calls to a function that would generate a request are placed within time specified in the <code>debounceTime</code> property,
+	their settings are merged, and just one request is send to a remote server. If <code>debounceTime</code> is set to 0, each call to methods
+	such as <code>orderBy</code>, <code>limitTo</code> or <code>filter</code> send a request to a server immediately (<code>getGridModel</code> does not generate
+	any AJAX requests - it uses cached data).
+</p>
+<p>
+	For example - let's suppose that <code>debounceTime</code> is set to 150ms. The provider's client (be it an Angular controller, or a directive)
+	calls the <code>filter("foo")</code> method. Then, in less than 150ms it calls <code>limitTo(10)</code>. Then, no more calls are made in the next 150ms,
+	so the <code>ServerDataProvider</code> issues a GET request containing both the filtering and paging options to the server.
+</p>
+
+<h3>Examples</h3>
+<h4>Javascript</h4>
+<pre highlight="javascript">
+angular.module("myApp").controller("myController", function ($scope, lgServerDataProviderFactory) {
+	$scope.serverDataProvider = lgServerDataProviderFactory.create("/api/things");
+	$scope.serverDataProvider.debounceTime = 150;
+});
+</pre>
+
+<h4>HTML</h4>
+<pre highlight="html">
+&lt;lg-grid model="serverDataProvider.getGridModel()"&gt;
+	&lt;lg-column title="'ID'"&gt;{{ rowData.id }}&lt;/lg-column&gt;
+	&lt;lg-column title="'Name'"&gt;{{ rowData.name }}&lt;/lg-column&gt;
+&lt;/lg-grid&gt;
+</pre>

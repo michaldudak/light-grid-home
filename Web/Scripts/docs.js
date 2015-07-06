@@ -15,9 +15,15 @@
 				}
 			});
 
+		// This is to prevent sample code from being interpreted as angular expressions.
 		$interpolateProvider.startSymbol("{{{");
 		$interpolateProvider.endSymbol("}}}");
-
 	}]);
+
+	app.run(function($rootScope, $anchorScroll) {
+		$rootScope.$on("$routeChangeSuccess", function() {
+			$anchorScroll("#view");
+		});
+	});
 
 }(window, window.angular));

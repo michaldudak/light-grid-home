@@ -1,1 +1,34 @@
 ﻿<h2><code>lgEditableColumn</code> directive</h2>
+
+<p>
+	Creates a column that displays property from the data source. The displayed value is editable (the column contains the 'edit' view).
+</p>
+<p class="alert alert-info">
+	<strong>Note</strong> Currently the edit view always renders a text input, regardless of the actual type of the data. This will be improved in future versions.
+</p>
+
+<h3>Attributes</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Attribute</th>
+			<th>Type</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>property</td>
+			<td>string</td>
+			<td>Name of the field to bind the column to.</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Examples</h3>
+<pre highlight="html">
+&lt;lg-grid model="myModel"&gt;
+	&lt;lg-editable-column property="firstName"&gt;&lt;/lg-editable-column&gt;
+	&lt;lg-editable-column property="lastName"&gt;&lt;/lg-editable-column&gt;
+&lt;/lg-grid&gt;
+</pre>
