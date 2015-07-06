@@ -1,1 +1,47 @@
 ﻿<h2><code>lgPersistData</code> directive</h2>
+
+<p>
+	Triggers persisting a modified grid row upon clicking. This directive will usually be placed on a button that's visible only in edit mode.
+</p>
+<p>
+	This directive should be used as an attribute.
+</p>
+
+<h3>Attributes</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Attribute</th>
+			<th>Type</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>provider</td>
+			<td>data provider</td>
+			<td>A reference to a data provider this control will communicate with.</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Examples</h3>
+<pre highlight="html">
+&lt;lg-grid model="dataProvider.getGridModel()"&gt;
+	&lt;lg-column title="'Name'"&gt;
+		&lt;div lg-view&gt;{{ rowData.name }}&lt;/div&gt;
+		&lt;div lg-view="edit"&gt;
+			&lt;input ng-model="viewData.name" /&gt;
+		&lt;/div&gt;
+	&lt;/lg-column&gt;
+	&lt;lg-column&gt;
+		&lt;div lg-view&gt;
+			&lt;button lg-switch-view="edit"&gt;Edit&lt;/button&gt;
+		&lt;/div&gt;
+		&lt;div lg-view="edit"&gt;
+			&lt;button lg-persist-data provider="dataProvider"&gt;Save&lt;/button&gt;
+			&lt;button lg-switch-view="read"&gt;Cancel&lt;/button&gt;
+		&lt;/div&gt;
+	&lt;/lg-column&gt;
+&lt;/lg-grid&gt;
+</pre>

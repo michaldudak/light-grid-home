@@ -1,1 +1,31 @@
 ﻿<h2><code>lgPager</code> directive</h2>
+
+<p>Renders paging controls that modify the result set returned by a data provider.</p>
+
+<h3>Attributes</h3>
+<table class="table table-striped">
+	<thead>
+	<tr>
+		<th>Attribute</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>provider</td>
+		<td>data provider</td>
+		<td>A reference to a data provider this control will communicate with.</td>
+	</tr>
+	<tr>
+		<td>page-size-options</td>
+		<td>string</td>
+		<td>A non-interpolated, comma-delimited string specifying page size options. If not set, defaults to '10,25,50'</td>
+	</tr>
+	</tbody>
+</table>
+
+<h3>Examples</h3>
+<pre highlight="html">
+&lt;lg-pager provider="dataProvider" page-size-options="5,10,20"&gt;&lt;/lg-pager&gt;
+</pre>

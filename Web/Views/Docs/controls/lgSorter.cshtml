@@ -1,1 +1,49 @@
 ﻿<h2><code>lgSorter</code> directive</h2>
+
+<p>
+	Renders controls to order data by a particular field. Will usually be placed inside a <code>lgHeaderView</code> directive.
+</p>
+<p>
+	You may put the column title inside the directive. This way, clicking on the title will trigger sorting.
+</p>
+
+<h3>Attributes</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Attribute</th>
+			<th>Type</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>sort-property (or lg-sorter)</td>
+			<td>string</td>
+			<td>Name of the field to order the data by.</td>
+		</tr>
+		<tr>
+			<td>provider</td>
+			<td>data provider</td>
+			<td>A reference to a data provider this control will communicate with.</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Examples</h3>
+<pre highlight="html">
+&lt;lg-grid model="dataProvider.getGridModel()"&gt;
+	&lt;lg-column&gt;
+		&lt;lg-header-view&gt;
+			&lt;lg-sorter sort-property="firstName" provider="dataProvider"&gt;First Name&lt;/lg-sorter&gt;
+		&lt;/lg-header-view&gt;
+		{{ rowData.firstName }}
+	&lt;/lg-column&gt;
+	&lt;lg-column&gt;
+		&lt;lg-header-view&gt;
+			&lt;lg-sorter sort-property="lastName" provider="dataProvider"&gt;Last Name&lt;/lg-sorter&gt;
+		&lt;/lg-header-view&gt;
+		{{ rowData.lastName }}
+	&lt;/lg-column&gt;
+&lt;/lg-grid&gt;
+</pre>

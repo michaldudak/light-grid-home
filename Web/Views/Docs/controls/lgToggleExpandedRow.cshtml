@@ -1,1 +1,44 @@
 ﻿<h2><code>lgToggleExpandedRow</code> directive</h2>
+
+<p>Opens or closes the expanded view of the row.</p>
+<p>This directive can be only used as an attribute. Its value specifies the name of the template used as an expanded row content.</p>
+
+<h3>Attributes</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Attribute</th>
+			<th>Type</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>details-template (or lg-toggle-expanded-row)</td>
+			<td>string</td>
+			<td>ID or URL of the template to show in the expanded view.</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Examples</h3>
+<pre highlight="html">
+&lt;script type="text/ng-template" id="detailsTemplate"&gt;
+	&lt;p&gt;
+		{{ rowData.firstName }} {{ rowData.lastName }} was born on
+		{{ rowData.birthday }} in {{ rowData.birthPlace }}.
+	&lt;/p&gt;
+&lt;/script&gt;
+
+&lt;lg-grid id="sampleGrid" model="model"&gt;
+	&lt;lg-column title="'First Name'"&gt;
+		{{ rowData.firstName }}
+	&lt;/lg-column&gt;
+	&lt;lg-column title="'Last Name'"&gt;
+		{{ rowData.lastName }}
+	&lt;/lg-column&gt;
+	&lt;lg-column&gt;
+		&lt;button lg-toggle-expanded-row="detailsTemplate"&gt;Details&lt;/button&gt;
+	&lt;/lg-column&gt;
+&lt;/lg-grid&gt;
+</pre>
