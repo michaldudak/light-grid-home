@@ -7,6 +7,12 @@
 			$scope.dataProvider.filter($scope.filterExpression);
 		});
 	}
+
+	function detailsController($scope, $sce) {
+		$scope.getMapUrl = function () {
+			return $sce.trustAsResourceUrl("https://www.google.com/maps/embed/v1/view?key=AIzaSyAQfMqap7X0mJ7MVcPsheEJyyp0WDRFNHA&center=" + $scope.rowData.loc[1] + ',' + $scope.rowData.loc[0] + "&zoom=14");
+		}
+	}
 </script>
 
 <h2>Fully featured grid based on remote data</h2>
@@ -25,15 +31,10 @@
 
 	<script type="text/ng-template" id="detailsTemplate.html">
 		<div class="panel panel-default">
-			<div class="panel-body">
-				<dl>
-					<dt>City</dt>
-					<dd>{{ rowData.city }}</dd>
-					<dt>State</dt>
-					<dd>{{ rowData.state }}</dd>
-					<dt>ZIP code</dt>
-					<dd>{{ rowData._id }}</dd>
-				</dl>
+			<div class="panel-body" ng-controller="detailsController">
+				<div class="row">
+					<iframe class="col-md-12" frameborder="0" style="border:0; height: 400px" ng-src="{{ getMapUrl() }}" allowfullscreen></iframe>
+				</div>
 			</div>
 		</div>
 	</script>
