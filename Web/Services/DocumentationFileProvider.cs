@@ -8,6 +8,8 @@ namespace Web.Services
 {
 	public class DocumentationFileProvider
 	{
+		private const string FirstItemTitle = "Overview";
+
 		public DocumentationFileSources GetDocumentationFiles()
 		{
 			return new DocumentationFileSources
@@ -33,7 +35,11 @@ namespace Web.Services
 				return new string[0];
 			}
 
-			return viewsFolder.EnumerateFiles("*.cshtml").Select(f => Path.GetFileNameWithoutExtension(f.Name)).OrderBy(n => n).ToList();
+			return viewsFolder
+				.EnumerateFiles("*.cshtml")
+				.Select(f => Path.GetFileNameWithoutExtension(f.Name))
+				.OrderBy(n => n == FirstItemTitle ? string.Empty : n)
+				.ToList();
 		}
 	}
 }

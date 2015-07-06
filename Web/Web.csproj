@@ -144,7 +144,7 @@
     <Content Include="Views\Demos\simplest.cshtml" />
     <Content Include="Views\Demos\sortableColumns.cshtml" />
     <Content Include="Views\Docs\dataProviders\LocalDataProvider.cshtml" />
-    <Content Include="Views\Docs\dataProviders\overview.cshtml" />
+    <Content Include="Views\Docs\dataProviders\Overview.cshtml" />
     <Content Include="Views\Docs\lightGrid\lgColumnTemplates.cshtml" />
     <Content Include="Views\Docs\lightGrid\lgView.cshtml" />
     <Content Include="Web.config" />
@@ -181,6 +181,7 @@
     <Content Include="Views\Demos\serverSideProcessing.cshtml" />
     <Content Include="Views\Docs\dataProviders\lgServerDataProviderFactory.cshtml" />
     <Content Include="Views\Docs\dataProviders\ServerDataProvider.cshtml" />
+    <Content Include="Views\Docs\controls\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
