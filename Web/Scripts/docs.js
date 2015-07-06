@@ -1,10 +1,10 @@
 ﻿(function (window, ng) {
 	"use strict";
 
-	var app = ng.module("lightGridDocs", ["ngRoute"]);
+	var app = ng.module("lightGridDocs", ["ngRoute", "lightGridHomeUtils"]);
 	window.app = app;
 
-	app.config(function ($routeProvider, $compileProvider) {
+	app.config(["$routeProvider", "$compileProvider", "$interpolateProvider", function ($routeProvider, $compileProvider, $interpolateProvider) {
 
 		$compileProvider.debugInfoEnabled(false);
 
@@ -14,6 +14,10 @@
 					return "Docs/" + params.topic + "/" + params.page;
 				}
 			});
-	});
+
+		$interpolateProvider.startSymbol("{{{");
+		$interpolateProvider.endSymbol("}}}");
+
+	}]);
 
 }(window, window.angular));

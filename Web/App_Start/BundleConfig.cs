@@ -21,7 +21,7 @@ namespace Web
 					.Include("~/Scripts/light-grid.js")
 					.Include("~/Scripts/highlight.pack.js")
 					.Include("~/Scripts/demoApp.js")
-					.Include("~/Scripts/sourceDisplay.js");
+					.Include("~/Scripts/utils.js");
 
 			bundles.Add(samplesScripts);
 

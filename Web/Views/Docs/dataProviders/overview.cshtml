@@ -5,7 +5,7 @@
 <p>
 	The grid itself does not know anything about the provider (the opposite is also true). They communicate via the following binding (assuming the provider is registered on the scope):
 </p>
-<pre>
+<pre highlight="html">
 &lt;lg-grid model="dataProvider.getGridModel()"&gt;&lt;/lg-grid&gt;
 </pre>
 <h3>Data provider anatomy</h3>
@@ -68,6 +68,6 @@
 <p>
 	To use a provider, a dependency to the <code>lightGridDataProviders</code> module must be set in the application module definition.
 </p>
-<pre>
+<pre highlight="javascript">
 angular.module("myApp", ["lightGrid", "lightGridDataProviders"]);
 </pre>

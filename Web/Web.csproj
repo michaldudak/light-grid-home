@@ -135,7 +135,7 @@
     <Content Include="Scripts\highlight.pack.js" />
     <Content Include="Scripts\jquery.js" />
     <Content Include="Scripts\light-grid.js" />
-    <Content Include="Scripts\sourceDisplay.js" />
+    <Content Include="Scripts\utils.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Demos\clientSideSearch.cshtml" />
     <Content Include="Views\Demos\expandedRow.cshtml" />
