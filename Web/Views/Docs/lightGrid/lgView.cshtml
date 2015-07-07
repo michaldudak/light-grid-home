@@ -1,3 +1,47 @@
 ﻿<h2><code>lgView</code> directive</h2>
-<p>Defines a view in the column template.</p>
-<p>Does not expose any API.</p>
+<p>
+	Defines a view in the column template. A view is a template used to display a cell in a grid. Each row in the table can have
+	multiple views defined. Users can switch between them using a <a href="@Url.Action("Api", "Home")#/controls/lgSwitchView">lgSwitchView</a> directive.
+</p>
+
+<h3>Attributes</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Attribute</th>
+			<th>Type</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>title</td>
+			<td>string</td>
+			<td>Title of the column (used to render a header if header template is not specified).</td>
+		</tr>
+		<tr>
+			<td>view (or lg-view)</td>
+			<td>string</td>
+			<td>Name or comma-separated list of names of the view. If not set, a view will be shown if no other view matches.</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Examples</h3>
+<pre highlight="html">
+&lt;lg-grid model="myModel"&gt;
+	&lt;lg-column&gt;
+		&lt;lg-view view="read"&gt;
+			This will be visible only when the row is in 'read' mode.
+		&lt;/lg-view&gt;
+		&lt;lg-view&gt;
+			This will be visible in every other mode.
+		&lt;/lg-view&gt;
+	&lt;/lg-column&gt;
+	&lt;lg-column&gt;
+		&lt;lg-view view="read, edit"&gt;
+			This will be visible only when the row is either in 'read' or 'edit' mode.
+		&lt;/lg-view&gt;
+	&lt;/lg-column&gt;
+&lt;/lg-grid&gt;
+</pre>

@@ -1,1 +1,38 @@
 ﻿<h2><code>LocalDataProvider</code> object</h2>
+
+<p>Allows the grid to use a model defined as a javascript array.</p>
+<p>
+	Although a grid can directly use an array, without the need of any provider, the use of a
+	LocalDataProvider allows to modify the data source - order, filter or limit the number of displayed elements.
+</p>
+
+<h3>Methods</h3>
+<p>
+	This provider supports all the methods described in the <a href="@Url.Action("Api", "Home")#/dataProviders/overview">data providers overview</a>.
+	However, the <code>saveModel</code> method does not do anything, as the model is updated instantenously via ng-model binidings.
+</p>
+
+<h3>Properties</h3>
+<p>The <code>LocalDataProvider</code> does not expose any properties.</p>
+
+<h3>Examples</h3>
+<h4>Javascript</h4>
+<pre highlight="javascript">
+angular.module("myApp").controller("myController", function ($scope, lgLocalDataProviderFactory) {
+	var model = [
+		{ id: 1, name: "one" },
+		{ id: 2, name: "two" },
+		{ id: 3, name: "three" }
+	];
+
+	$scope.localDataProvider = lgLocalDataProviderFactory.create(model);
+});
+</pre>
+
+<h4>HTML</h4>
+<pre highlight="html">
+&lt;lg-grid model="localDataProvider.getGridModel()"&gt;
+	&lt;lg-column title="'ID'"&gt;{{ rowData.id }}&lt;/lg-column&gt;
+	&lt;lg-column title="'Name'"&gt;{{ rowData.name }}&lt;/lg-column&gt;
+&lt;/lg-grid&gt;
+</pre>

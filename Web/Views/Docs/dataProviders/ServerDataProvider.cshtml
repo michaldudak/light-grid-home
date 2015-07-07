@@ -3,13 +3,38 @@
 <p>This provider takes its data from a remote server via AJAX calls.</p>
 
 <h3>Methods</h3>
-This provider supports all the methods described in the <a href="@Url.Action("Api", "Home")#/dataProviders/overview">data providers overview</a>.
+<p>
+	This provider supports all the methods described in the <a href="@Url.Action("Api", "Home")#/dataProviders/overview">data providers overview</a>.
+</p>
 
 <h3>Properties</h3>
-<dl>
-	<dt>debounceTime</dt>
-	<dd>A number that specifies the requet debounce time (in milliseconds). See below for more details</dd>
-</dl>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Property</th>
+			<th>Type</th>
+			<th>Description</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>debounceTime</td>
+			<td>number</td>
+			<td>A number that specifies the requet debounce time (in milliseconds). See below for more details.</td>
+		</tr>
+		<tr>
+			<td>settingsSerializer</td>
+			<td>function(viewSettings) : string</td>
+			<td>A function that created a query string based on the current view settings (optional).</td>
+		</tr>
+		<tr>
+			<td>responseParser</td>
+			<td>function(response)<br /> : { data:array, totalRecords:number }</td>
+			<td>A function that parses the server response (optional).</td>
+		</tr>
+	</tbody>
+</table>
+
 
 <h3>Request debouncing</h3>
 <p>To save bandwidth, this data provider is able to merge several subsequent requests into one.</p>
@@ -24,6 +49,54 @@ This provider supports all the methods described in the <a href="@Url.Action("Ap
 	calls the <code>filter("foo")</code> method. Then, in less than 150ms it calls <code>limitTo(10)</code>. Then, no more calls are made in the next 150ms,
 	so the <code>ServerDataProvider</code> issues a GET request containing both the filtering and paging options to the server.
 </p>
+
+<h3>Custom functions</h3>
+<p>
+	The <code>ServerDataProvider</code> allows developers to specify functions that control the creation of GET URL and interpretation of server response -
+	namely <code>settingsSerializer</code> and <code>responseParser</code>.
+</p>
+
+<h4>Settings serializer</h4>
+<p>
+	The <code>settingsSerializer</code> is responsible for preparing the query string of the URL under which a grid model is accessble. It accepts view settings
+	object as a parameter and should return a query string (without the leading "?"). The view settings object has the following properties:
+</p>
+<ul>
+	<li>
+		<code>limitTo</code> - paging settings
+		<ul>
+			<li><code>limit</code> - (Number) page size</li>
+			<li><code>begin</code> - (Number) index of the first returned record</li>
+		</ul>
+	</li>
+	<li>
+		<code>orderBy</code> - ordering settings
+		<ul>
+			<li><code>expression</code> - (String) field name to order by</li>
+			<li><code>reverse</code> - (Boolean) determines if results should be returned in reverse order</li>
+		</ul>
+	</li>
+	<li>
+		<code>filter</code> - filtering settings
+		<ul>
+			<li><code>expression</code> - (String) phrase to search for</li>
+		</ul>
+	</li>
+</ul>
+<p>
+	If not set, the serializer is set to default (its output is described on <a href="@Url.Action("Api", "Home")#/dataProviders/lgServerDataProviderFactory">lgServerDataProviderFactory page</a>.
+</p>
+
+<h4>Response parser</h4>
+<p>
+	The job of the response parser is to translate the server response into a format the provider understands. It accepts whatever the server sends back
+	and it is required to return an object with two properties:
+</p>
+<ul>
+	<li><code>data</code> - (array of objects) the data to display on the grid</li>
+	<li><code>totalResults</code> - (Number) the number of total results found on the server (after the filtering, but before paging)</li>
+</ul>
+<p>The default parser just passes the server response through (i.e. the server is required to return a JSON response in aforementioned format.</p>
 
 <h3>Examples</h3>
 <h4>Javascript</h4>

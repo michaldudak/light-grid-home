@@ -20,7 +20,7 @@
 	<li><code>totalResults</code> - (Number) the number of total results found on the server (after the filtering, but before paging)</li>
 </ul>
 
-<p>The server should accept the following parameters in the query string of the GET request:</p>
+<p>By default, the server should accept the following parameters in the query string of the GET request:</p>
 <ul>
 	<li><code>search</code> - the expression to filter the results by</li>
 	<li><code>orderBy</code> - the name of the field to order the results by</li>
@@ -28,6 +28,10 @@
 	<li><code>limit</code> - maximal number of results to return</li>
 	<li><code>begin</code> - zero-based index of the first element to return</li>
 </ul>
+<p>
+	These parameters may be customized with the help of custom settings serializer. See the <a href="@Url.Action("Api", "Home")#/dataProviders/ServerDataProvider">ServerDataProvider</a>
+	docs for more details.
+</p>
 
 <h4>POST</h4>
 <p>
