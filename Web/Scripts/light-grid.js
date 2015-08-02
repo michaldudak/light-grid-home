@@ -1,11 +1,11 @@
-/*!
- Light Grid 0.2.0 
+﻿/*!
+ Light Grid 0.3.0-wip 
 
- by Micha� Dudak
+ by Michał Dudak
  https://github.com/michaldudak/light-grid.git
  license: MIT
 
- build date: 2015-07-07T19:19:52.399Z
+ build date: 2015-08-02T18:11:24.420Z
 */
 
 (function (window, angular, $, undefined) {
@@ -18,630 +18,303 @@
         throw new Error("jQuery must be included before Angular.");
     }
 
-    var gridModule = angular.module("lightGrid", []);
-
-    gridModule.constant("DEFAULT_VIEW_NAME", "*");
+    angular.module("lightGrid", []).constant("DEFAULT_VIEW", "read");
 
 
-    /**
-     * Represents a cell in a table.
-     * Does not expose any API.
-     *
-     * @function cellDirective
-     * @module lightGrid
-     */
-    angular.module("lightGrid").directive("lgCell", ["$compile", "DEFAULT_VIEW_NAME", function cellDirective($compile, DEFAULT_VIEW_NAME) {
-        "use strict";
+    /* exported getBlockNodes */
 
-        var countProperties;
+    function getBlockNodes(nodes) {
+        // TODO(perf): just check if all items in `nodes` are siblings and if they are return the original
+        // collection, otherwise update the original collection.
 
-        if (typeof (Object.keys) === "function") {
-            countProperties = function (obj) {
-                return Object.keys(obj).length;
-            };
-        } else {
-            countProperties = function (obj) {
-                var count = 0;
-                for (var prop in obj) {
-                    if (obj.hasOwnProperty(prop)) {
-                        ++count;
-                    }
-                }
+        var node = nodes[0];
+        var endNode = nodes[nodes.length - 1];
+        var blockNodes = [node];
 
-                return count;
-            };
-        }
-
-        return {
-            require: "^lgRow",
-            link: function cellLink(scope, element, attrs, rowController) {
-                var views = scope.columnDefinition.views;
-
-                var transclusionScope = rowController.getCellScope();
-
-                // CSS class defined on column template is copied to the rendered TD element...
-                element.addClass(scope.columnDefinition.attributes.class);
-
-                // ...and so is the width attribute
-                if (scope.columnDefinition.attributes.width) {
-                    element.css("width", scope.columnDefinition.attributes.width);
-                }
-
-                if (countProperties(views) === 1 && !angular.isUndefined(views[DEFAULT_VIEW_NAME])) {
-                    // Optimization: if there is just default view defined, we don't need ngSwitch.
-                    // Instead we'll just wrap the original contents of the directive in a div.
-
-                    var singleView = views[DEFAULT_VIEW_NAME];
-                    var singleViewNode = angular.element("<div>").append(singleView);
-
-                    element.append(singleViewNode);
-                    $compile(singleViewNode)(transclusionScope);
-
-                    return;
-                }
-
-                var switchRoot = angular.element("<div ng-switch='view'>");
-
-                for (var view in views) {
-                    if (views.hasOwnProperty(view) && view !== DEFAULT_VIEW_NAME) {
-                        // Processing all the views except the default one:
-                        // each view gets linked with the cell scope and wrapped in a ng-switch-when container
-                        // that shows it only when scope's view property matches the view name
-                        var viewHtml = views[view];
-                        var switchElement = angular.element("<div ng-switch-when='" + view + "' />");
-
-                        // View content is added to the container with a ng-switch attribute
-                        switchRoot.append(switchElement);
-                        switchElement.append(viewHtml);
-                    }
-                }
-
-                // The view identified by DEFAULT_VIEW_NAME is a special case - it defines the 'fallback'
-                // view used if no other view matches.
-                if (angular.isDefined(views[DEFAULT_VIEW_NAME])) {
-                    var defaultElement = angular.element("<div ng-switch-default />");
-                    switchRoot.append(defaultElement);
-                    defaultElement.append(views[DEFAULT_VIEW_NAME]);
-                }
-
-                element.append(switchRoot);
-
-                // The whole container needs to be compiled to enable the ng-switch directive.
-                $compile(switchRoot)(transclusionScope);
+        do {
+            node = node.nextSibling;
+            if (!node) {
+                break;
             }
-        };
-    }]);
+            blockNodes.push(node);
+        } while (node !== endNode);
 
-
-    /**
-     * Defines a column template.
-     * Attributes:
-     *  - title - {String} (interpolated) title of the column (used to render a header if header template is not specified)
-     *  - visible - {Boolean} specifies if a column should be rendered
-     */
-    angular.module("lightGrid").directive("lgColumn", ["DEFAULT_VIEW_NAME", function (DEFAULT_VIEW_NAME) {
-        "use strict";
-
-        return {
-            scope: {
-                title: "=",
-                visible: "=?"
-            },
-            restrict: "EA",
-            require: "^lgGrid",
-            transclude: true,
-            controller: ["$scope", function columnController($scope) {
-                $scope.views = {};
-                $scope.viewCount = 0;
-                $scope.headerTemplate = null;
-                $scope.footerTemplate = null;
-
-                /**
-                 * Registers a view in a column.
-                 * @param  {String} name - Name of the view (optional, defaults to the DEFAULT_VIEW_NAME constant)
-                 * @param  {String} viewHtml - content of the view as HTML
-                 */
-                this.registerView = function (name, viewHtml) {
-                    name = name || DEFAULT_VIEW_NAME;
-
-                    // name argument may contain a comma-separated list of view names
-                    // we need to register the linking function in all of them
-                    var separatedNames = name.split(",");
-
-                    for (var i = 0; i < separatedNames.length; ++i) {
-                        var separatedName = separatedNames[i].trim();
-                        if (separatedName === "") {
-                            continue;
-                        }
-
-                        $scope.views[separatedName] = viewHtml;
-                        $scope.viewCount += 1;
-                    }
-                };
-
-                /**
-                 * Registers a header template in a column.
-                 * @param  {Function} viewLinker - Precompiled view template (as a linking function)
-                 */
-                this.registerHeaderTemplate = function (viewLinker) {
-                    $scope.headerTemplate = viewLinker;
-                };
-
-                /**
-                 * Registers a footer template in a column.
-                 * @param  {Function} viewLinker - Precompiled view template (as a linking function)
-                 */
-                this.registerFooterTemplate = function (viewLinker) {
-                    $scope.footerTemplate = viewLinker;
-                };
-            }],
-            controllerAs: "templateColumnController",
-            link: function columnLink(scope, instanceElement, instanceAttrs, gridController, transcludeLink) {
-
-                if (!instanceAttrs.visible) {
-                    scope.visible = true;
-                }
-
-                scope.$watch("visible", function (newValue, oldValue) {
-                    if (newValue !== oldValue) {
-                        gridController.updateColumn(scope.$id, {
-                            visible: !!scope.visible
-                        });
-                    }
-                });
-
-                transcludeLink(scope, function (clone) {
-                    // transcluded content is added to the element so that lgColumnController can be
-                    // required by lgView directives
-                    instanceElement.append(clone);
-                });
-
-                if (scope.viewCount === 0) {
-                    // simple mode - if no views are defined, the content of the directive is treated
-                    // as the default view
-                    var viewContents = instanceElement.html();
-                    scope.templateColumnController.registerView(DEFAULT_VIEW_NAME, viewContents);
-                }
-
-                gridController.defineColumn(scope.$id, {
-                    title: scope.title,
-                    views: scope.views,
-                    headerTemplate: scope.headerTemplate,
-                    footerTemplate: scope.footerTemplate,
-                    attributes: instanceAttrs,
-                    visible: !!scope.visible
-                });
-
-                // this element should not be rendered
-                instanceElement.remove();
-            }
-        };
-    }]);
-
-
-    /**
-     * Dummy directive to be placed on a row containing column templates
-     * (when writing HTML-compliant markup)
-     *
-     * Example:
-     *   <table data-light-grid id="sampleGrid" data-data="people">
-     *     <tr data-column-templates>
-     *       <td data-lg-column title="'First name'">{{rowData.firstName}}</td>
-     *       <td data-lg-column title="'Last name'">{{rowData.lastName}}</td>
-     *     </tr>
-     *   </table>
-     */
-    angular.module("lightGrid").directive("lgColumnTemplates", function () {
-        "use strict";
-
-        return {
-            restrict: "A",
-            link: function columnTemplatesLink(scope, element) {
-                var parent = element.parent();
-                // browsers may create additional tbody tag surrounding the <td lg-column-templates">. We don't need this.
-                if (parent[0].tagName === "TBODY" && parent.children().length === 1) {
-                    parent.remove();
-                } else {
-                    element.remove();
-                }
-            }
-        };
-
-    });
-
+        return angular.element(blockNodes);
+    }
 
     /**
      * The root grid directive.
      * Parameters:
-     *  - id - {String} ID of the grid. This attribute must be present and unique.
      *  - model - {Array} (interpolated) data model displayed on the grid (optional).
      *  - initial-view - {String} Name of the initial view mode of all rows in the grid.
      */
     angular.module("lightGrid").directive("lgGrid", function gridDirective() {
         "use strict";
 
-        var gridController = function GridController($scope) {
+        return {
+            scope: true,
+            controller: ["$scope", "$attrs", function lgGridController($scope, $attrs) {
+                this.getModel = function getModel() {
+                    return $scope.grid.data;
+                };
 
-            var columnDefinitions = {};
-            $scope.visibleColumns = [];
+                this.getInitialView = function getInitialView() {
+                    return $attrs.initialView;
+                };
 
-            /**
-             * Gets the model displayed on the grid.
-             * @return {Array} Model displayed on the grid.
-             */
-            this.getData = function getData() {
-                return $scope.model;
-            };
+                this.switchView = function switchView(viewName) {
+                    $scope.$parent.$broadcast("switchView:" + this.getIdentifier(), viewName);
+                };
 
-            /**
-             * Gets the current view model displayed on the grid.
-             * @return {Array} Current state of the grid's view model
-             */
-            this.getViewData = function getViewData() {
-                if (angular.isArray($scope.model)) {
-                    return $scope.model.map(function (elem) {
-                        return elem.$viewData;
-                    });
-                } else {
-                    var gridViewData = {};
+                this.getIdentifier = function getIedntifier() {
+                    return $scope.$$gridId;
+                };
+            }],
+            require: "lgGrid",
+            link: {
+                pre: function lgGridLink($scope, $elem, $attrs, gridController) {
+                    $scope.$$gridId = Math.floor(Math.random() * 1000000);
 
-                    for (var prop in $scope.model) {
-                        if ($scope.model.hasOwnProperty(prop)) {
-                            gridViewData[prop] = $scope.model[prop].$viewData;
+                    $scope.grid = {
+                        data: $scope.$eval($attrs.model),
+                        controller: gridController
+                    };
+
+                    $scope.$watch($attrs.model, function (newValue, oldValue) {
+                        if (newValue !== oldValue) {
+                            $scope.grid.data = newValue;
                         }
-                    }
+                    });
 
-                    return gridViewData;
+                    $elem.addClass("light-grid");
                 }
-            };
-
-            /**
-             * Sets the model of the grid.
-             * @param {[type]} newData [description]
-             */
-            this.setData = function setData(newData) {
-                $scope.model = newData;
-            };
-
-            function updateVisibleColumns() {
-                $scope.visibleColumns.length = 0;
-
-                for (var id in columnDefinitions) {
-                    if (columnDefinitions.hasOwnProperty(id) && columnDefinitions[id].definition.visible) {
-                        $scope.visibleColumns.push(columnDefinitions[id].definition);
-                    }
-                }
-            }
-
-            /**
-             * Registers a column template.
-             * @param {Object} columnDefinition Column definition object
-             */
-            this.defineColumn = function defineColumn(id, columnDefinition) {
-                columnDefinitions[id] = { definition: columnDefinition };
-
-                updateVisibleColumns();
-            };
-
-            /**
-             * Updates a registered column template.
-             * @param {Object} columnDefinition Column definition object
-             */
-            this.updateColumn = function updateColumn(id, columnDefinition) {
-                if (!columnDefinitions.hasOwnProperty(id)) {
-                    throw new Error("Column " + id + " was not registered.");
-                }
-
-                angular.extend(columnDefinitions[id].definition, columnDefinition);
-                updateVisibleColumns();
-            };
-
-            /**
-             * Changes a view in all visible rows of the grid.
-             *
-             * @param {String} viewName Name of the new view.
-             */
-            this.switchView = function switchView(viewName) {
-                $scope.$broadcast("lightGrid.row.switchView", viewName);
-            };
-
-            /**
-             * Copies values from the view model to the data model.
-             * This method is asynchronous.
-             */
-            this.acceptViewModel = function acceptViewModel() {
-                $scope.$broadcast("lightGrid.row.acceptViewModel");
-            };
-
-            /**
-             * Gets the scope of the grid directive.
-             * @return {Scope} Scope of the grid directive.
-             */
-            this.getScope = function getScope() {
-                return $scope;
-            };
-
-            /**
-             * Creates a new scope for transcluded elements. The new scope inherits from the grid's parent scope.
-             * @returns {Scope} The new scope.
-             */
-            this.createTransclusionScope = function createTransclusionScope() {
-                return $scope.$parent.$new();
-            };
-        };
-        gridController.$inject = ["$scope"];
-
-        // TODO: footer support
-        var defaultTemplate =
-            "<table class='light-grid'>" +
-                "<thead><tr lg-header-row></tr></thead>" +
-                "<tbody><tr lg-row default-view='read' initial-view='{{ ::initialView || \"read\" }}' ng-repeat='rowData in model'></tr></tbody>" +
-            "</table>";
-
-        return {
-            scope: {
-                model: "=",
-                initialView: "@"
-            },
-            template: defaultTemplate,
-            replace: true,
-            restrict: "EA",
-            transclude: true,
-            link: function gridLink(scope, elem, attrs, controller, transclude) {
-                // directives such as dataProvider require access to the parent of the grid scope,
-                // so they can't be linked with the grid scope (as it's isolated).
-                var transclusionScope = scope.$parent.$new();
-                transclude(transclusionScope, function (clone) {
-                    elem.append(clone);
-                });
-            },
-            controller: gridController,
-            controllerAs: "gridController"
-        };
-    });
-
-
-    /**
-     * Represents a cell in a header of a table.
-     * Does not expose any API.
-     */
-    angular.module("lightGrid").directive("lgHeaderCell", function headerCellDirective() {
-        "use strict";
-
-        return {
-            template: "{{ columnDefinition.title }}",
-            restrict: "A",
-            require: "^lgGrid",
-            link: function headerCellLink(scope, element, attrs, gridController) {
-                // CSS class defined on column template is copied to the rendered TH element
-                element.addClass(scope.columnDefinition.attributes.class);
-
-                if (!scope.columnDefinition.headerTemplate) {
-                    return;
-                }
-
-                // same as in the lgCell directive
-                var transclusionScope = gridController.createTransclusionScope();
-                transclusionScope.data = scope.data;
-                transclusionScope.gridController = scope.gridController;
-                transclusionScope.title = scope.columnDefinition.title;
-
-                if (scope.columnDefinition.attributes.width) {
-                    element.css("width", scope.columnDefinition.attributes.width);
-                }
-
-                element.empty();
-
-                // link the header template with the correct scope...
-                scope.columnDefinition.headerTemplate(transclusionScope, function (clone) {
-                    // ...and insert the linked template inside the directive root element
-                    element.append(clone);
-                });
             }
         };
     });
 
 
-    /**
-     * Represents a row inside grid's header.
-     * Does not expose any API.
-     */
-    angular.module("lightGrid").directive("lgHeaderRow", function headerRowDirective() {
+    /* global getBlockNodes */
+
+    angular.module("lightGrid").directive("lgRow", ["$parse", "$animate", "DEFAULT_VIEW", function rowDirective($parse, $animate, DEFAULT_VIEW) {
         "use strict";
 
-        return {
-            restrict: "A",
-            template: "<th lg-header-cell ng-repeat='columnDefinition in visibleColumns'></th>"
+        /* Code based on Angular's ngRepeat: https://github.com/angular/angular.js/blob/master/src/ng/directive/ngRepeat.js */
+
+        var NG_REMOVED = "$$NG_REMOVED";
+
+        var updateScope = function (scope, index, valueIdentifier, value, arrayLength, rowController, gridController) {
+            // TODO(perf): generate setters to shave off ~40ms or 1-1.5%
+            scope[valueIdentifier] = value;
+
+            scope.$index = index;
+            scope.$first = (index === 0);
+            scope.$last = (index === (arrayLength - 1));
+            scope.$middle = !(scope.$first || scope.$last);
+            // jshint bitwise: false
+            scope.$odd = !(scope.$even = (index & 1) === 0);
+            // jshint bitwise: true
+
+            scope.row = {
+                data: scope.$$rowData,
+                view: gridController.getInitialView() || DEFAULT_VIEW,
+                viewModel: angular.copy(scope.$$rowData),
+                controller: rowController
+            };
+
+            scope.$on("switchView:" + gridController.getIdentifier(), function (e, viewName) {
+                rowController.switchView(viewName);
+            });
         };
-    });
 
-
-    /**
-     * Template for the header (defined in the lgColumn)
-     * Does not expose any API.
-     */
-    angular.module("lightGrid").directive("lgHeaderView", function () {
-        "use strict";
-
-        return {
-            restrict: "EA",
-            require: "^lgColumn",
-            transclude: true,
-            link: function headerViewLink(scope, instanceElement, instanceAttrs, templateColumnController, linker) {
-                instanceElement.remove();
-                templateColumnController.registerHeaderTemplate(linker);
-            }
+        var getBlockStart = function (block) {
+            return block.clone[0];
         };
-    });
 
+        var getBlockEnd = function (block) {
+            return block.clone[block.clone.length - 1];
+        };
 
-    angular.module("lightGrid").directive("lgRow", ["$compile", function rowDirective($compile) {
-        "use strict";
+        function createMap() {
+            return Object.create(null);
+        }
 
-        var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{visibleColumns.length}}' ng-include='expandedTemplate'></td></tr>";
+        function RowController($scope) {
+            var registeredViews = {};
 
-        function defineViewDataProperty(obj) {
-            try {
-                Object.defineProperty(obj, "$viewData", {
-                    configurable: true,
-                    writable: true
-                });
-            } catch (err) {
-                // IE < 9 does not support properties
-                // falling back to plain field
+            this.switchView = function (view) {
+                $scope.row.view = view;
+            };
 
-                obj.$viewData = null;
-            }
+            this.acceptViewModel = function () {
+                angular.extend($scope.row.data, $scope.row.viewModel);
+            };
+
+            this.registerView = function (viewName) {
+                registeredViews[viewName] = true;
+            };
+
+            this.isViewRegistered = function (viewName) {
+                return !!registeredViews[viewName];
+            };
         }
 
         return {
             restrict: "A",
-            template: "<td lg-cell ng-repeat='columnDefinition in visibleColumns'></td>",
-            controller: ["$scope", "$element", function rowController($scope, $element) {
-                var self = this;
+            multiElement: true,
+            transclude: "element",
+            priority: 1000,
+            terminal: true,
+            $$tlb: true,
+            require: "^lgGrid",
+            compile: function lgRowCompile() {
+                var lgRowEndComment = document.createComment(" end lgRow ");
 
-                // The scope of the cell content inherits from grid's parent (so creating column templates in markup is intuitive)
-                // This scope is augmented with several properties from the row scope (so it's possible to reference e.g. row
-                // data in the column template).
-                var cellsScope = $scope.gridController.createTransclusionScope();
+                var valueIdentifier = "$$rowData";
+                var collectionIdentifier = "grid.data";
 
-                // these properties won't ever be overwritten, so it's safe to use simple assignment here
-                cellsScope.rowData = $scope.rowData;
-                cellsScope.data = $scope.data;
-                cellsScope.gridController = $scope.gridController;
-                cellsScope.rowController = this;
-
-                // the next two properties may be overwritten in a row scope, so it's necessary to update the cell's scope
-                // when this happens
-                $scope.$watch("view", function () {
-                    cellsScope.view = $scope.view;
-                });
-
-                $scope.$watch("viewData", function () {
-                    cellsScope.viewData = $scope.viewData;
-                });
-
-                $scope.expandedTemplate = null;
-
-                /**
-                 * Gets the scope which the cells should be linked to.
-                 */
-                this.getCellScope = function () {
-                    return cellsScope;
+                var trackByIdObjFn = function identity(key) {
+                    return key;
                 };
 
-                /**
-                 * Shows the expanded row below the original one, containing the provided template.
-                 * The expanded row has only one cell (spanning across the entire grid width).
-                 * @param {String} detailsTemplate - name of the template to load
-                 */
-                this.openDetails = function (detailsTemplate) {
-                    $scope.expandedTemplate = detailsTemplate;
-                };
+                return function lgRowLink($scope, $element, $attr, gridController, $transclude) {
 
-                /**
-                 * Collapses the expanded row.
-                 */
-                this.closeDetails = function () {
-                    $scope.expandedTemplate = null;
-                };
+                    // Store a list of elements from previous run. This is a hash where key is the item from the
+                    // iterator, and the value is objects with following properties.
+                    // - scope: bound scope
+                    // - element: previous element.
+                    // - index: position
+                    // We are using no-proto object so that we don't need to guard against inherited props via
+                    // hasOwnProperty.
+                    var lastBlockMap = createMap();
 
-                /**
-                 * If the row is expanded, collapses it. Otherwise expands it with a given template.
-                 * @param {String} detailsTemplate - name of the template to load
-                 */
-                this.toggleDetails = function (detailsTemplate) {
-                    if ($scope.expandedTemplate === null) {
-                        self.openDetails(detailsTemplate);
-                    } else {
-                        self.closeDetails();
-                    }
-                };
+                    // watch props
+                    $scope.$watchCollection(collectionIdentifier, function lgRowWatchAction(collection) {
+                        var index,
+                            length,
+                            previousNode = $element[0], // node that cloned nodes should be inserted after
+                                                        // initialized to the comment node anchor
+                            nextNode,
+                            // Same as lastBlockMap but it has the current state. It will become the
+                            // lastBlockMap on the next iteration.
+                            nextBlockMap = createMap(),
+                            collectionLength,
+                            key, value, // key/value of iteration
+                            trackById,
+                            trackByIdFn,
+                            collectionKeys,
+                            block,			 // last object information {scope, element, id}
+                            nextBlockOrder,
+                            elementsToRemove;
 
-                /**
-                * Changes the view mode of the row.
-                * @param {String} viewName - name of the new view
-                */
-                this.switchView = function (viewName) {
-                    if ($scope.view === viewName) {
-                        return;
-                    }
+                        trackByIdFn = trackByIdObjFn;
 
-                    $scope.view = viewName;
-                    self.resetViewModel();
-                };
+                        // if object, extract keys, in enumeration order, unsorted
+                        collectionKeys = [];
+                        for (var itemKey in collection) {
+                            if (collection.hasOwnProperty(itemKey) && itemKey.charAt(0) !== "$") {
+                                collectionKeys.push(itemKey);
+                            }
+                        }
 
-                /**
-                 * Copies values from the row's view model to the data model.
-                 */
-                this.acceptViewModel = function () {
-                    angular.extend($scope.rowData, $scope.viewData);
-                    defineViewDataProperty($scope.rowData);
-                    $scope.rowData.$viewData = $scope.viewData;
-                };
+                        collectionLength = collectionKeys.length;
+                        nextBlockOrder = new Array(collectionLength);
 
-                /**
-                 * Discards the row's view model.
-                 */
-                this.resetViewModel = function () {
-                    delete $scope.rowData.$viewData;
-                    $scope.viewData = angular.copy($scope.rowData);
-                    defineViewDataProperty($scope.rowData);
-                    $scope.rowData.$viewData = $scope.viewData;
-                };
+                        function restoreLastBlockMap(block) {
+                            if (block && block.scope) {
+                                lastBlockMap[block.id] = block;
+                            }
+                        }
 
-                /**
-                 * Gets a jQuery wrapper over the DOM element of the row (TR).
-                 * @return {jQuery} jQuery object representing the TR row node.
-                 */
-                this.getDomElement = function () {
-                    return $element;
-                };
+                        // locate existing items
+                        for (index = 0; index < collectionLength; index++) {
+                            key = (collection === collectionKeys) ? index : collectionKeys[index];
+                            value = collection[key];
+                            trackById = trackByIdFn(key, value, index);
 
-                /**
-                 * Adds the specified CSS class to the row node.
-                 * @param {String} className - class to add
-                 */
-                this.addCssClass = function (className) {
-                    $element.addClass(className);
-                };
+                            if (lastBlockMap[trackById]) {
+                                // found previously seen block
+                                block = lastBlockMap[trackById];
+                                delete lastBlockMap[trackById];
+                                nextBlockMap[trackById] = block;
+                                nextBlockOrder[index] = block;
+                            } else if (nextBlockMap[trackById]) {
+                                // if collision detected restore lastBlockMap and throw an error
+                                angular.forEach(nextBlockOrder, restoreLastBlockMap);
+                                throw new Error("Duplicate rows detected. The grid cannot render the same row twice. Use angular.copy to create a new instance. Duplicate value: " + value);
+                            } else {
+                                // new never before seen block
+                                nextBlockOrder[index] = { id: trackById, scope: undefined, clone: undefined };
+                                nextBlockMap[trackById] = true;
+                            }
+                        }
 
-                /**
-                 * Removes the specified CSS class from the row node.
-                 * @param {String} className - class to remove
-                 */
-                this.removeCssClass = function (className) {
-                    $element.removeClass(className);
-                };
+                        /* jshint forin:false */
+                        // remove leftover items
+                        for (var blockKey in lastBlockMap) {
+                            block = lastBlockMap[blockKey];
+                            elementsToRemove = getBlockNodes(block.clone);
+                            $animate.leave(elementsToRemove);
 
-                // listening to grid's events
-                $scope.$on("lightGrid.row.switchView", function (event, viewName) {
-                    self.switchView(viewName);
-                });
+                            if (elementsToRemove[0].parentNode) {
+                                // if the element was not removed yet because of pending animation, mark it as deleted
+                                // so that we can ignore it later
 
-                $scope.$on("lightGrid.row.acceptViewModel", function () {
-                    self.acceptViewModel();
-                });
-            }],
-            controllerAs: "rowController",
-            compile: function rowCompile(tElement) {
-                if (tElement[0].nodeName !== "TR") {
-                    throw new Error("Row directive must be placed on a tr element.");
-                }
+                                length = elementsToRemove.length;
+                                for (index = 0; index < length; index++) {
+                                    elementsToRemove[index][NG_REMOVED] = true;
+                                }
+                            }
 
-                var expandingRowLinker = $compile(expandingRowMarkup);
+                            block.scope.$destroy();
+                        }
+                        /* jshint forin:true */
 
-                return function rowLink(scope, element, attrs, controller) {
-                    scope.$watch("rowData", function () {
-                        controller.resetViewModel();
-                    });
+                        // we are not using forEach for perf reasons (trying to avoid #call)
+                        for (index = 0; index < collectionLength; index++) {
+                            key = (collection === collectionKeys) ? index : collectionKeys[index];
+                            value = collection[key];
+                            block = nextBlockOrder[index];
 
-                    scope.view = attrs.initialView;
+                            if (block.scope) {
+                                // if we have already seen this object, then we need to reuse the
+                                // associated scope/element
 
-                    // angular templates can't have several top-level elements (also TR can't be a template root),
-                    // so we need to insert another row here during linking
-                    expandingRowLinker(scope, function (clone) {
-                        element.after(clone);
+                                nextNode = previousNode;
+
+                                // skip nodes that are already pending removal via leave animation
+                                do {
+                                    nextNode = nextNode.nextSibling;
+                                } while (nextNode && nextNode[NG_REMOVED]);
+
+                                if (getBlockStart(block) !== nextNode) {
+                                    // existing item which got moved
+                                    $animate.move(getBlockNodes(block.clone), null, angular.element(previousNode));
+                                }
+                                previousNode = getBlockEnd(block);
+                                updateScope(block.scope, index, valueIdentifier, value, collectionLength, new RowController(block.scope), gridController);
+                            } else {
+                                /* jshint loopfunc:true */
+                                // new item which we don't know about
+                                $transclude(function lgRowTransclude(clone, scope) {
+                                    block.scope = scope;
+                                    // http://jsperf.com/clone-vs-createcomment
+                                    var endNode = lgRowEndComment.cloneNode(false);
+                                    clone[clone.length++] = endNode;
+
+                                    // TODO(perf): support naked previousNode in `enter` to avoid creation of jqLite wrapper?
+                                    $animate.enter(clone, null, angular.element(previousNode));
+                                    previousNode = endNode;
+                                    // Note: We only need the first/last node of the cloned nodes.
+                                    // However, we need to keep the reference to the jqlite wrapper as it might be changed later
+                                    // by a directive with templateUrl when its template arrives.
+                                    block.clone = clone;
+                                    nextBlockMap[block.id] = block;
+                                    updateScope(block.scope, index, valueIdentifier, value, collectionLength, new RowController(block.scope), gridController);
+                                });
+                                /* jshint loopfunc:false */
+                            }
+                        }
+                        lastBlockMap = nextBlockMap;
                     });
                 };
             }
@@ -652,27 +325,69 @@
     /**
      * Defines a view in the column template
      */
-    angular.module("lightGrid").directive("lgView", function () {
+    angular.module("lightGrid").directive("lgView", ["$compile", function ($compile) {
         "use strict";
 
+        function isInitialized(element) {
+            if (element.length > 1) {
+                return angular.isDefined(element.first().attr("lg-view-initialized"));
+            } else {
+                return angular.isDefined(element.attr("lg-view-initialized"));
+            }
+        }
+
         return {
-            restrict: "EA",
-            require: "^lgColumn",
-            compile: function viewCompile(tElement, tAttrs) {
-                var innerHtml = tElement.html();
+            multiElement: true,
+            link: function lgViewLink($scope, $elem, $attrs) {
+                if (isInitialized($elem)) {
+                    return;
+                }
 
-                // we don't want to compile the contents of the view at this point
-                // it'll be done later, in cell directive
-                tElement.empty();
+                var viewNameExpression = $attrs.lgView || $attrs.view;
+                var viewNames;
 
-                return function viewLink(scope, element, attrs, templateColumnController) {
-                    var view = tAttrs.lgView || tAttrs.view;
-                    templateColumnController.registerView(view, innerHtml);
-                    element.remove();
+                if (!viewNameExpression) {
+                    viewNames = [];
+                } else {
+                    viewNames = viewNameExpression.split(",").map(function (viewName) {
+                        return viewName.trim();
+                    });
+                }
+
+                viewNames.forEach(function (viewName) {
+                    $scope.row.controller.registerView(viewName);
+                });
+
+                $scope.shouldShowDefaultView = function (requestedViewName) {
+                    return !$scope.row.controller.isViewRegistered(requestedViewName);
                 };
+
+                var displayCondition;
+
+                if (viewNames.length === 0) {
+                    displayCondition = "shouldShowDefaultView(row.view)";
+                } else {
+                    displayCondition = viewNames.map(function (viewName) {
+                        return "row.view === '" + viewName + "'";
+                    }).join(" || ");
+                }
+
+                if ($elem.length > 1) {
+                    var first = $elem.first();
+                    var last = $elem.last();
+
+                    first.attr("ng-if-start", "displayCondition");
+                    first.attr("lg-view-initialized", "");
+                    last.attr("ng-if-end", "");
+                } else {
+                    $elem.attr("lg-view-initialized", "");
+                    $elem.attr("ng-if", displayCondition);
+                }
+
+                $compile($elem)($scope);
             }
         };
-    });
+    }]);
 
 
     angular.module("lightGridTemplates", ["lightGrid"]);
@@ -684,7 +399,7 @@
     angular.module("lightGridTemplates").directive("lgBoundColumn", function () {
         "use strict";
 
-        var template = "<lg-column>{{rowData['{property}']}}</lg-column>";
+        var template = "<td>{{ row.data['{property}'] }}</td>";
 
         return {
             restrict: "EA",
@@ -703,36 +418,21 @@
     angular.module("lightGridTemplates").directive("lgEditableColumn", function () {
         "use strict";
 
-        var template = "<lg-column><lg-view>{{rowData[\"{property}\"]}}</lg-view><lg-view view='edit'>" +
-            "<input type='text' ng-model='viewData[\"{property}\"]' class='form-control input-sm' /></lg-view></lg-column>";
+        var template = "<td>" +
+            "<lg-view>{{ row.data[\"{property}\"] }}</lg-view>" +
+            "<lg-view view='edit'>" +
+            "<input type='text' ng-model='row.data[\"{property}\"]' class='{inputClass}' />" +
+            "</lg-view>" +
+            "</td>";
 
         return {
             restrict: "EA",
-            template: function (elem, attrs) {
-                return template.replace(/\{property\}/g, attrs.property);
-            },
-            replace: true
-        };
-    });
-
-
-    /**
-     * Simple sortable column bound to a model's property
-     */
-    angular.module("lightGridTemplates").directive("lgSortableColumn", function () {
-        "use strict";
-
-        var template = "<lg-column><lg-header-view><span lg-sorter sort-property='{property}' data-provider='{provider}'>{{ {title} }}</span></lg-header-view><lg-view>{{rowData['{property}']}}</lg-view></lg-column>";
-
-        return {
-            restrict: "EA",
+            replace: true,
             template: function (elem, attrs) {
                 return template
-                    .replace(/\{property\}/g, attrs.property)
-                    .replace(/\{title\}/g, attrs.title)
-                    .replace(/\{provider}/g, attrs.provider);
-            },
-            replace: true
+                    .replace(/\{property\}/g, attrs.property || attrs.lgEditableColumn)
+                    .replace("{inputClass}", attrs.inputClass);
+            }
         };
     });
 
@@ -1069,6 +769,66 @@
     angular.module("lightGridControls", ["lightGrid"]);
 
 
+    /* global getBlockNodes */
+
+    angular.module("lightGridControls").directive("lgExpandedRow", ["$animate", function ($animate) {
+        "use strict";
+
+        /* Code based on Angular's ngIf directive: https://github.com/angular/angular.js/blob/master/src/ng/directive/ngIf.js */
+        return {
+            multiElement: true,
+            transclude: "element",
+            priority: 600,
+            terminal: true,
+            restrict: "A",
+            require: "^?lgRow",
+            $$tlb: true,
+            link: function lgExpandedRowLink($scope, $element, $attr, ctrl, $transclude) {
+                var block;
+                var childScope;
+                var previousElements;
+
+                $scope.$watch("row.expanded", function lgExpandedRowWatchAction(shouldBeVisible) {
+                    if (shouldBeVisible) {
+                        if (!childScope) {
+                            $transclude(function (clone, newScope) {
+                                childScope = newScope;
+                                clone[clone.length++] = document.createComment(" end lgExpandedRow ");
+                                // Note: We only need the first/last node of the cloned nodes.
+                                // However, we need to keep the reference to the jqlite wrapper as it might be changed later
+                                // by a directive with templateUrl when its template arrives.
+                                block = {
+                                    clone: clone
+                                };
+
+                                $animate.enter(clone, $element.parent(), $element);
+                            });
+                        }
+                    } else {
+                        if (previousElements) {
+                            previousElements.remove();
+                            previousElements = null;
+                        }
+
+                        if (childScope) {
+                            childScope.$destroy();
+                            childScope = null;
+                        }
+
+                        if (block) {
+                            previousElements = getBlockNodes(block.clone);
+                            $animate.leave(previousElements).then(function () {
+                                previousElements = null;
+                            });
+
+                            block = null;
+                        }
+                    }
+                });
+            }
+        };
+    }]);
+
     angular.module("lightGridControls").directive("lgPager", function () {
         "use strict";
 
@@ -1187,13 +947,15 @@
             restrict: "A",
             link: function persistDataLink($scope, $elem, $params) {
                 $elem.on("click", function () {
-
                     var dataProvider = $scope.$eval($params.provider);
+                    var rowController = $scope.row.controller;
 
                     $q.when(dataProvider.saveModel($scope.viewData))
                         .then(function () {
-                            $scope.rowController.acceptViewModel();
-                            $scope.rowController.switchView("read");
+                            if (rowController) {
+                                rowController.acceptViewModel();
+                                rowController.switchView("read");
+                            }
                         });
                 });
             }
@@ -1256,25 +1018,22 @@
      * Allows to change a view mode of the row.
      * Can only be used as an attribute. Its value specifies name of the target view mode.
      */
-    angular.module("lightGridControls").directive("lgSwitchView", function () {
+    angular.module("lightGridControls").directive("lgSwitchView", ["$timeout", function ($timeout) {
         "use strict";
 
         return {
-            require: "^?lgRow",
             restrict: "A",
-            link: function switchViewLink(scope, elem, attrs, rowController) {
+            link: function switchViewLink(scope, elem, attrs) {
                 var viewName = attrs.lgSwitchView;
 
                 elem.on("click", function () {
-                    rowController.switchView(viewName);
-
-                    if (!scope.$$phase) {
-                        scope.$apply();
-                    }
+                    $timeout(function () {
+                        scope.row.controller.switchView(viewName);
+                    });
                 });
             }
         };
-    });
+    }]);
 
 
     /**
@@ -1282,25 +1041,21 @@
      * This can be only used as an attribute. Its value specifies the name of the template
      * used as an expanded row content.
      */
-    angular.module("lightGridControls").directive("lgToggleExpandedRow", function () {
+    angular.module("lightGridControls").directive("lgToggleExpandedRow", ["$timeout", function ($timeout) {
         "use strict";
 
         return {
             require: "^?lgRow",
             restrict: "A",
-            link: function toggleExpandedRowLink(scope, elem, attrs, rowController) {
-                var detailsTemplate = attrs.lgToggleExpandedRow || attrs.detailsTemplate;
+            link: function toggleExpandedRowLink($scope, $elem) {
 
-                elem.on("click", function () {
-                    rowController.toggleDetails(detailsTemplate);
-
-                    if (!scope.$$phase) {
-                        scope.$apply();
-                    }
+                $elem.on("click", function () {
+                    $timeout(function () {
+                        $scope.row.expanded = !$scope.row.expanded;
+                    });
                 });
             }
         };
-    });
-
+    }]);
 
 }(window, window.angular, window.jQuery));

@@ -10,7 +10,7 @@
 
 	function detailsController($scope, $sce) {
 		$scope.getMapUrl = function () {
-			return $sce.trustAsResourceUrl("https://www.google.com/maps/embed/v1/view?key=AIzaSyAQfMqap7X0mJ7MVcPsheEJyyp0WDRFNHA&center=" + $scope.rowData.loc[1] + ',' + $scope.rowData.loc[0] + "&zoom=14");
+			return $sce.trustAsResourceUrl("https://www.google.com/maps/embed/v1/view?key=AIzaSyAQfMqap7X0mJ7MVcPsheEJyyp0WDRFNHA&center=" + $scope.row.data.loc[1] + ',' + $scope.row.data.loc[0] + "&zoom=14");
 		}
 	}
 </script>
@@ -39,76 +39,74 @@
 		</div>
 	</script>
 
-	<table lg-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
+	<table lg-grid class="table table-striped" model="dataProvider.getGridModel()">
+		<thead>
+			<tr>
+				<th><span lg-sorter sort-property="city" data-provider="dataProvider">City</span></th>
+				<th><span lg-sorter sort-property="state" data-provider="dataProvider">State</span></th>
+				<th><span lg-sorter sort-property="_id" data-provider="dataProvider">ZIP</span></th>
+				<th><span lg-sorter sort-property="loc[0]" data-provider="dataProvider">Lat</span></th>
+				<th><span lg-sorter sort-property="loc[1]" data-provider="dataProvider">Lon</span></th>
+				<th><span lg-sorter sort-property="pop" data-provider="dataProvider">Population</span></th>
+			</tr>
+		</thead>
 		<tbody>
-			<tr lg-column-templates>
-				<td lg-column>
-					<lg-header-view>
-						<span lg-sorter sort-property='city' data-provider='dataProvider'>City</span>
-					</lg-header-view>
+			<tr lg-row-start>
+				<td>
 					<lg-view>
-						{{ rowData.city }}
+						{{ row.data.city }}
 					</lg-view>
 					<lg-view view="edit">
-						<input ng-model="viewData.city" class="form-control input-sm"/>
+						<input ng-model="row.viewModel.city" class="form-control input-sm" />
 					</lg-view>
 				</td>
-				<td lg-column>
-					<lg-header-view>
-						<span lg-sorter sort-property='state' data-provider='dataProvider'>State</span>
-					</lg-header-view>
+
+				<td>
 					<lg-view>
-						{{ rowData.state }}
+						{{ row.data.state }}
 					</lg-view>
 					<lg-view view="edit">
-						<input ng-model="viewData.state" class="form-control input-sm"/>
+						<input ng-model="row.viewModel.state" class="form-control input-sm" />
 					</lg-view>
 				</td>
-				<td lg-column>
-					<lg-header-view>
-						<span lg-sorter sort-property='_id' data-provider='dataProvider'>ZIP</span>
-					</lg-header-view>
+
+				<td>
 					<lg-view>
-						{{ rowData._id }}
+						{{ row.data._id }}
 					</lg-view>
 					<lg-view view="edit">
-						<input ng-model="viewData._id" class="form-control input-sm"/>
+						<input ng-model="row.viewModel._id" class="form-control input-sm" />
 					</lg-view>
 				</td>
-				<td lg-column>
-					<lg-header-view>
-						<span lg-sorter sort-property='loc[0]' data-provider='dataProvider'>Lat</span>
-					</lg-header-view>
+
+				<td>
 					<lg-view>
-						{{ rowData.loc[0] | number }}
+						{{ row.data.loc[0] | number }}
 					</lg-view>
 					<lg-view view="edit">
-						<input type="number" ng-model="viewData.loc[0]" class="form-control input-sm"/>
+						<input type="number" ng-model="row.viewModel.loc[0]" class="form-control input-sm" />
 					</lg-view>
 				</td>
-				<td lg-column title="'Longitude'">
-					<lg-header-view>
-						<span lg-sorter sort-property='loc[1]' data-provider='dataProvider'>Lon</span>
-					</lg-header-view>
+
+				<td>
 					<lg-view>
-						{{ rowData.loc[1] | number }}
+						{{ row.data.loc[1] | number }}
 					</lg-view>
 					<lg-view view="edit">
-						<input type="number" ng-model="viewData.loc[1]" class="form-control input-sm"/>
+						<input type="number" ng-model="row.viewModel.loc[1]" class="form-control input-sm" />
 					</lg-view>
 				</td>
-				<td lg-column>
-					<lg-header-view>
-						<span lg-sorter sort-property='pop' data-provider='dataProvider'>Population</span>
-					</lg-header-view>
+
+				<td>
 					<lg-view>
-						{{ rowData.pop }}
+						{{ row.data.pop }}
 					</lg-view>
 					<lg-view view="edit">
-						<input type="number" ng-model="viewData.pop" class="form-control input-sm"/>
+						<input type="number" ng-model="row.viewModel.pop" class="form-control input-sm" />
 					</lg-view>
 				</td>
-				<td lg-column>
+
+				<td>
 					<div lg-view>
 						<button class="btn btn-default btn-sm" lg-switch-view="edit">Edit</button>
 						<button class="btn btn-default btn-sm" lg-toggle-expanded-row="detailsTemplate.html">Details</button>
@@ -116,9 +114,12 @@
 					<div lg-view="edit">
 						<button class="btn btn-primary btn-sm" lg-persist-data data-provider="dataProvider">Save</button>
 						<button class="btn btn-default btn-sm" lg-switch-view="read">Cancel</button>
-						<button class="btn btn-default btn-sm" lg-toggle-expanded-row="detailsTemplate.html">Details</button>
+						<button class="btn btn-default btn-sm" lg-toggle-expanded-row>Details</button>
 					</div>
 				</td>
+			</tr>
+			<tr lg-row-end lg-expanded-row>
+				<td colspan="7" ng-include="'detailsTemplate.html'"></td>
 			</tr>
 		</tbody>
 	</table>

@@ -7,12 +7,19 @@
 <h2>Grid with a local data provider</h2>
 
 <div ng-controller="localDataGridController" ng-non-bindable>
-	<table lg-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
+	<table lg-grid class="table table-striped" model="dataProvider.getGridModel()">
+		<thead>
+			<tr>
+				<th>Make</th>
+				<th>Model</th>
+				<th>Engine</th>
+			</tr>
+		</thead>
 		<tbody>
-			<tr lg-column-templates>
-				<td lg-column title="'Make'">{{ rowData.make }}</td>
-				<td lg-column title="'Model'">{{ rowData.model }}</td>
-				<td lg-column title="'Engine'">{{ rowData.engine }}</td>
+			<tr lg-row>
+				<td>{{ row.data.make }}</td>
+				<td>{{ row.data.model }}</td>
+				<td>{{ row.data.engine }}</td>
 			</tr>
 		</tbody>
 	</table>

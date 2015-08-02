@@ -8,31 +8,39 @@
 <h2>Editable row with local data provider</h2>
 
 <div ng-controller="localEditableRowController" ng-non-bindable>
-	<table lg-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
+	<table lg-grid class="table table-striped" model="dataProvider.getGridModel()">
+		<thead>
+			<tr>
+				<th>Make</th>
+				<th>Model</th>
+				<th>Engine</th>
+				<th></th>
+			</tr>
+		</thead>
 		<tbody>
-			<tr lg-column-templates>
-				<td lg-column title="'Make'" width="28%">
-					<div lg-view>{{ rowData.make }}</div>
+			<tr lg-row>
+				<td width="28%">
+					<div lg-view>{{ row.data.make }}</div>
 					<div lg-view="edit">
 						<input ng-model="viewData.make" class="form-control input-sm" />
 					</div>
 				</td>
 
-				<td lg-column title="'Model'" width="28%">
-					<div lg-view>{{ rowData.model }}</div>
+				<td width="28%">
+					<div lg-view>{{ row.data.model }}</div>
 					<div lg-view="edit">
 						<input ng-model="viewData.model" class="form-control input-sm" />
 					</div>
 				</td>
 
-				<td lg-column title="'Engine'" width="28%">
-					<div lg-view>{{ rowData.engine }}</div>
+				<td width="28%">
+					<div lg-view>{{ row.data.engine }}</div>
 					<div lg-view="edit">
 						<input ng-model="viewData.engine" class="form-control input-sm" />
 					</div>
 				</td>
 
-				<td lg-column width="16%">
+				<td width="16%">
 					<div lg-view>
 						<button class="btn btn-default btn-sm" lg-switch-view="edit">Edit</button>
 					</div>

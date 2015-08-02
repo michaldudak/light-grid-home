@@ -40,6 +40,9 @@
 			.when("/server-side-processing", {
 				templateUrl: "Demos/serverSideProcessing"
 			})
+			.when("/custom-element", {
+			 templateUrl: "Demos/gridOnCustomElement"
+			})
 			.otherwise({
 				redirectTo: "/simplest"
 			});

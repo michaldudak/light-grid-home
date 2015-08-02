@@ -183,6 +183,7 @@
     <Content Include="Views\Docs\dataProviders\ServerDataProvider.cshtml" />
     <Content Include="Views\Docs\controls\Overview.cshtml" />
     <Content Include="Views\Docs\templates\Overview.cshtml" />
+    <Content Include="Views\Demos\gridOnCustomElement.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

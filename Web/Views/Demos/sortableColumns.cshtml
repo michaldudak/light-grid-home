@@ -8,12 +8,19 @@
 <h2>Sortable columns</h2>
 
 <div ng-controller="sortableColumnsController" ng-non-bindable>
-	<table lg-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
+	<table lg-grid class="table table-striped" model="dataProvider.getGridModel()">
+		<thead>
+			<tr>
+				<th><lg-sorter sort-property="make" data-provider="dataProvider">Make</lg-sorter></th>
+				<th><lg-sorter sort-property="model" data-provider="dataProvider">Model</lg-sorter></th>
+				<th><lg-sorter sort-property="engine" data-provider="dataProvider">Engine</lg-sorter></th>
+			</tr>
+		</thead>
 		<tbody>
-			<tr lg-column-templates>
-				<td lg-sortable-column property="make" title="'Make'" data-provider="dataProvider"></td>
-				<td lg-sortable-column property="model" title="'Model'" data-provider="dataProvider"></td>
-				<td lg-sortable-column property="engine" title="'Engine'" data-provider="dataProvider"></td>
+			<tr lg-row>
+				<td>{{ row.data.make }}</td>
+				<td>{{ row.data.model }}</td>
+				<td>{{ row.data.engine }}</td>
 			</tr>
 		</tbody>
 	</table>

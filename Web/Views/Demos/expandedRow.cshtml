@@ -10,18 +10,29 @@
 	<script type="text/ng-template" id="detailsTemplate.html">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<p>Here we can show additional details of {{ rowData.make }} {{ rowData.model }}.</p>
+				<p>Here we can show additional details of {{ row.data.make }} {{ row.data.model }}.</p>
 			</div>
 		</div>
 	</script>
 
-	<table lg-grid id="sampleGrid" class="table table-striped" model="model">
+	<table lg-grid class="table table-striped" model="model">
+		<thead>
+			<tr>
+				<th>Make</th>
+				<th>Model</th>
+				<th>Engine</th>
+				<th></th>
+			</tr>
+		</thead>
 		<tbody>
-			<tr lg-column-templates>
-				<td lg-column title="'Make'">{{ rowData.make }}</td>
-				<td lg-column title="'Model'">{{ rowData.model }}</td>
-				<td lg-column title="'Engine'">{{ rowData.engine }}</td>
-				<td lg-column><button lg-toggle-expanded-row="detailsTemplate.html" class="btn btn-default btn-sm">Details</button></td>
+			<tr lg-row-start>
+				<td>{{ row.data.make }}</td>
+				<td>{{ row.data.model }}</td>
+				<td>{{ row.data.engine }}</td>
+				<td><button lg-toggle-expanded-row class="btn btn-default btn-sm">Details</button></td>
+			</tr>
+			<tr lg-row-end ng-if="row.expanded">
+				<td colspan="4" ng-include="'detailsTemplate.html'"></td>
 			</tr>
 		</tbody>
 	</table>

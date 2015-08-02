@@ -8,12 +8,20 @@
 <h2>Hidden columns</h2>
 
 <div ng-controller="hiddenColumnGridController" ng-non-bindable>
-	<table lg-grid id="sampleGrid" class="table table-striped" model="model">
+	<table lg-grid class="table table-striped" model="model">
+		<thead>
+			<tr>
+				<th>Make</th>
+				<th>Model</th>
+				<th ng-if="engineColumnVisible">Engine</th>
+				<th></th>
+			</tr>
+		</thead>
 		<tbody>
-			<tr lg-column-templates>
-				<td lg-column title="'Make'">{{ rowData.make }}</td>
-				<td lg-column title="'Model'">{{ rowData.model }}</td>
-				<td lg-column title="'Engine'" visible="engineColumnVisible">{{ rowData.engine }}</td>
+			<tr lg-row>
+				<td>{{ row.data.make }}</td>
+				<td>{{ row.data.model }}</td>
+				<td ng-if="engineColumnVisible">{{ row.data.engine }}</td>
 			</tr>
 		</tbody>
 	</table>

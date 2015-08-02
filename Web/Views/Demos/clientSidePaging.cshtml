@@ -18,11 +18,17 @@
 <div ng-controller="clientSidePagingController" ng-non-bindable>
 	<lg-pager data-provider="dataProvider"></lg-pager>
 
-	<table lg-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
+	<table lg-grid class="table table-striped" model="dataProvider.getGridModel()">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+			</tr>
+		</thead>
 		<tbody>
-			<tr lg-column-templates>
-				<td lg-column title="'ID'">{{ rowData.id }}</td>
-				<td lg-column title="'Name'">{{ rowData.name }}</td>
+			<tr lg-row>
+				<td>{{ row.data.id }}</td>
+				<td>{{ row.data.name }}</td>
 			</tr>
 		</tbody>
 	</table>

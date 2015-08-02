@@ -1,0 +1,26 @@
+﻿<script>
+	function customElementGridController($scope, sampleModel) {
+		$scope.model = sampleModel;
+	};
+</script>
+
+<h2>List-based "grid"</h2>
+
+<div ng-controller="customElementGridController" ng-non-bindable>
+	<ol lg-grid class="table table-striped" model="model">
+		<li lg-row>
+			<dl>
+				<dt>Make</dt>
+				<dd>{{ row.data.make }}</dd>
+
+				<dt>Model</dt>
+				<dd>{{ row.data.model }}</dd>
+
+				<dt>Engine</dt>
+				<dd>{{ row.data.engine }}</dd>
+			</dl>
+		</li>
+	</ol>
+</div>
+
+<source-display></source-display>
