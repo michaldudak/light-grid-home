@@ -145,7 +145,6 @@
     <Content Include="Views\Demos\sortableColumns.cshtml" />
     <Content Include="Views\Docs\dataProviders\LocalDataProvider.cshtml" />
     <Content Include="Views\Docs\dataProviders\Overview.cshtml" />
-    <Content Include="Views\Docs\lightGrid\lgColumnTemplates.cshtml" />
     <Content Include="Views\Docs\lightGrid\lgView.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -166,17 +165,14 @@
     <Content Include="Views\Demos\fullyFeaturedLocal.cshtml" />
     <Content Include="Views\Demos\hiddenColumns.cshtml" />
     <Content Include="Views\Docs\lightGrid\lgGrid.cshtml" />
-    <Content Include="Views\Docs\lightGrid\lgColumn.cshtml" />
+    <Content Include="Views\Docs\lightGrid\lgRow.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Docs\lightGrid\lgHeaderView.cshtml" />
     <Content Include="Views\Docs\controls\lgPager.cshtml" />
     <Content Include="Views\Docs\controls\lgPersistData.cshtml" />
     <Content Include="Views\Docs\controls\lgToggleExpandedRow.cshtml" />
     <Content Include="Views\Docs\controls\lgSwitchView.cshtml" />
     <Content Include="Views\Docs\controls\lgSorter.cshtml" />
-    <Content Include="Views\Docs\templates\lgBoundColumn.cshtml" />
     <Content Include="Views\Docs\templates\lgEditableColumn.cshtml" />
-    <Content Include="Views\Docs\templates\lgSortableColumn.cshtml" />
     <Content Include="Views\Docs\dataProviders\lgLocalDataProviderFactory.cshtml" />
     <Content Include="Views\Demos\serverSideProcessing.cshtml" />
     <Content Include="Views\Docs\dataProviders\lgServerDataProviderFactory.cshtml" />

@@ -1,0 +1,61 @@
+﻿<h2><code>lgRow</code> directive</h2>
+<p>Defines a row template.</p>
+<p>
+	Inside the template, a <code>row</code> object is accessible in the scope.
+	It contains data from a single record of the data model exposed as a <code>model</code> property.
+	Other directives may enhance the <code>row</code> object by adding other properties.
+</p>
+<p>This directive may only be used as an attribute.</p>
+
+<h3>Spanning multiple elements</h3>
+<p>
+	Sometimes it may be necessary to render several rows per each data record.
+	The <code>lgRow</code> directive supports this case similarily to Angular's <code>ngRepeat</code> or <code>ngIf</code> - the multi-element syntax.
+	Simply place the <code>lg-row-begin</code> attribute on the first tag of the template and <code>lg-row-end</code> on the last tag. Note that these tags must have
+	a common parent. All tags between "start" and "end" will be repeated for each record inside the model.
+</p>
+
+<h3>Attributes</h3>
+<p>The <code>lgRow</code> directive does not accept any parameters.</p>
+
+<h3>Examples</h3>
+<h4>Basic usage</h4>
+<pre highlight="html">
+&lt;table lg-grid model="myModel"&gt;
+	&lt;tr&gt;
+		&lt;th&gt;Name&lt;/th&gt;
+		&lt;th&gt;Address&lt;/th&gt;
+	&lt;/tr&gt;
+	&lt;tr lg-row&gt;
+		&lt;td&gt;
+			{{ rowData.name }}
+		&lt;/td&gt;
+		&lt;td&gt;
+			{{ rowData.address }}
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+</pre>
+
+<h4>Multi-element</h4>
+<pre highlight="html">
+&lt;table lg-grid model="myModel"&gt;
+	&lt;tr&gt;
+		&lt;th&gt;Name&lt;/th&gt;
+		&lt;th&gt;Address&lt;/th&gt;
+	&lt;/tr&gt;
+	&lt;tr lg-row-begin&gt;
+		&lt;td&gt;
+			{{ rowData.name }}
+		&lt;/td&gt;
+		&lt;td&gt;
+			{{ rowData.address }}
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr lg-row-end&gt;
+		&lt;td colspan="2"&gt;
+			{{ rowData.description }}
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+</pre>

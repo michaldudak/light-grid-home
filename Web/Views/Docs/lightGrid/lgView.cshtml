@@ -29,19 +29,21 @@
 
 <h3>Examples</h3>
 <pre highlight="html">
-&lt;lg-grid model="myModel"&gt;
-	&lt;lg-column&gt;
-		&lt;lg-view view="read"&gt;
-			This will be visible only when the row is in 'read' mode.
-		&lt;/lg-view&gt;
-		&lt;lg-view&gt;
-			This will be visible in every other mode.
-		&lt;/lg-view&gt;
-	&lt;/lg-column&gt;
-	&lt;lg-column&gt;
-		&lt;lg-view view="read, edit"&gt;
-			This will be visible only when the row is either in 'read' or 'edit' mode.
-		&lt;/lg-view&gt;
-	&lt;/lg-column&gt;
-&lt;/lg-grid&gt;
+&lt;table lg-grid model="myModel"&gt;
+	&lt;tr lg-row&gt;
+		&lt;td&gt;
+			&lt;lg-view view="read"&gt;
+				This will be visible only when the row is in 'read' mode.
+			&lt;/lg-view&gt;
+			&lt;lg-view&gt;
+				This will be visible in every other mode.
+			&lt;/lg-view&gt;
+		&lt;/td&gt;
+		&lt;td&gt;
+			&lt;lg-view view="read, edit"&gt;
+				This will be visible only when the row is either in 'read' or 'edit' mode.
+			&lt;/lg-view&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
 </pre>
