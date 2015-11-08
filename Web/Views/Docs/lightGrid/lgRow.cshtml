@@ -2,7 +2,7 @@
 <p>Defines a row template.</p>
 <p>
 	Inside the template, a <code>row</code> object is accessible in the scope.
-	It contains data from a single record of the data model exposed as a <code>model</code> property.
+	It contains data from a single record of the data model exposed as a <code>data</code> property.
 	Other directives may enhance the <code>row</code> object by adding other properties.
 </p>
 <p>This directive may only be used as an attribute.</p>
@@ -28,10 +28,10 @@
 	&lt;/tr&gt;
 	&lt;tr lg-row&gt;
 		&lt;td&gt;
-			{{ rowData.name }}
+			{{ row.data.name }}
 		&lt;/td&gt;
 		&lt;td&gt;
-			{{ rowData.address }}
+			{{ row.data.address }}
 		&lt;/td&gt;
 	&lt;/tr&gt;
 &lt;/table&gt;
@@ -46,15 +46,15 @@
 	&lt;/tr&gt;
 	&lt;tr lg-row-begin&gt;
 		&lt;td&gt;
-			{{ rowData.name }}
+			{{ row.data.name }}
 		&lt;/td&gt;
 		&lt;td&gt;
-			{{ rowData.address }}
+			{{ row.data.address }}
 		&lt;/td&gt;
 	&lt;/tr&gt;
 	&lt;tr lg-row-end&gt;
 		&lt;td colspan="2"&gt;
-			{{ rowData.description }}
+			{{ row.data.description }}
 		&lt;/td&gt;
 	&lt;/tr&gt;
 &lt;/table&gt;

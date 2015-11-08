@@ -32,18 +32,18 @@
 
 <h3>Examples</h3>
 <pre highlight="html">
-&lt;lg-grid model="dataProvider.getGridModel()"&gt;
-	&lt;lg-column&gt;
-		&lt;lg-header-view&gt;
-			&lt;lg-sorter sort-property="firstName" provider="dataProvider"&gt;First Name&lt;/lg-sorter&gt;
-		&lt;/lg-header-view&gt;
-		{{ rowData.firstName }}
-	&lt;/lg-column&gt;
-	&lt;lg-column&gt;
-		&lt;lg-header-view&gt;
-			&lt;lg-sorter sort-property="lastName" provider="dataProvider"&gt;Last Name&lt;/lg-sorter&gt;
-		&lt;/lg-header-view&gt;
-		{{ rowData.lastName }}
-	&lt;/lg-column&gt;
-&lt;/lg-grid&gt;
+&lt;table lg-grid model="dataProvider.getGridModel()"&gt;
+	&lt;thead&gt;
+		&lt;tr&gt;
+			&lt;th&gt;&lt;lg-sorter sort-property="firstName" data-provider="dataProvider"&gt;First name&lt;/lg-sorter&gt;&lt;/th&gt;
+			&lt;th&gt;&lt;lg-sorter sort-property="lastName" data-provider="dataProvider"&gt;Last name&lt;/lg-sorter&gt;&lt;/th&gt;
+		&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+		&lt;tr lg-row&gt;
+			&lt;td&gt;{{ row.data.firstName }}&lt;/td&gt;
+			&lt;td&gt;{{ row.data.lastName }}&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
 </pre>

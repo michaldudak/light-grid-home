@@ -172,13 +172,11 @@
     <Content Include="Views\Docs\controls\lgToggleExpandedRow.cshtml" />
     <Content Include="Views\Docs\controls\lgSwitchView.cshtml" />
     <Content Include="Views\Docs\controls\lgSorter.cshtml" />
-    <Content Include="Views\Docs\templates\lgEditableColumn.cshtml" />
     <Content Include="Views\Docs\dataProviders\lgLocalDataProviderFactory.cshtml" />
     <Content Include="Views\Demos\serverSideProcessing.cshtml" />
     <Content Include="Views\Docs\dataProviders\lgServerDataProviderFactory.cshtml" />
     <Content Include="Views\Docs\dataProviders\ServerDataProvider.cshtml" />
     <Content Include="Views\Docs\controls\Overview.cshtml" />
-    <Content Include="Views\Docs\templates\Overview.cshtml" />
     <Content Include="Views\Demos\gridOnCustomElement.cshtml" />
   </ItemGroup>
   <ItemGroup />

@@ -50,7 +50,6 @@ namespace Web.Controllers
 				{
 					results = results.Reverse();
 				}
-				
 			}
 
 			if (begin.HasValue)

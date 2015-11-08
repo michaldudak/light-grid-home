@@ -25,20 +25,19 @@
 <pre highlight="html">
 &lt;script type="text/ng-template" id="detailsTemplate"&gt;
 	&lt;p&gt;
-		{{ rowData.firstName }} {{ rowData.lastName }} was born on
-		{{ rowData.birthday }} in {{ rowData.birthPlace }}.
+		{{ row.data.firstName }} {{ row.data.lastName }} was born on
+		{{ row.data.birthday }} in {{ row.data.birthPlace }}.
 	&lt;/p&gt;
 &lt;/script&gt;
 
-&lt;lg-grid id="sampleGrid" model="model"&gt;
-	&lt;lg-column title="'First Name'"&gt;
-		{{ rowData.firstName }}
-	&lt;/lg-column&gt;
-	&lt;lg-column title="'Last Name'"&gt;
-		{{ rowData.lastName }}
-	&lt;/lg-column&gt;
-	&lt;lg-column&gt;
-		&lt;button lg-toggle-expanded-row="detailsTemplate"&gt;Details&lt;/button&gt;
-	&lt;/lg-column&gt;
-&lt;/lg-grid&gt;
+&lt;table lg-grid model="model"&gt;
+	&lt;tr lg-row-start&gt;
+		&lt;td&gt;{{ row.data.firstName }}&lt;/td&gt;
+		&lt;td&gt;{{ row.data.lastName }}&lt;/td&gt;
+		&lt;td&gt;&lt;button lg-toggle-expanded-row class="btn btn-default btn-sm"&gt;Details&lt;/button&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr lg-row-end ng-if="row.expanded"&gt;
+		&lt;td colspan="3" ng-include="'detailsTemplate'"&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
 </pre>

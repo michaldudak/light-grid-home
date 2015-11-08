@@ -109,8 +109,10 @@ angular.module("myApp").controller("myController", function ($scope, lgServerDat
 
 <h4>HTML</h4>
 <pre highlight="html">
-&lt;lg-grid model="serverDataProvider.getGridModel()"&gt;
-	&lt;lg-column title="'ID'"&gt;{{ rowData.id }}&lt;/lg-column&gt;
-	&lt;lg-column title="'Name'"&gt;{{ rowData.name }}&lt;/lg-column&gt;
-&lt;/lg-grid&gt;
+&lt;table lg-grid model="serverDataProvider.getGridModel()"&gt;
+	&lt;tr lg-row&gt;
+		&lt;td&gt;{{ row.data.id }}&lt;/td&gt;
+		&lt;td&gt;{{ row.data.name }}&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
 </pre>

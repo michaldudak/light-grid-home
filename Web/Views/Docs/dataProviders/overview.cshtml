@@ -3,10 +3,10 @@
 	Data providers are the bridge between the grid and the data source. Since the grid's job is just displaying data, it is the responsibility of the provider to prepare the display model.
 </p>
 <p>
-	The grid itself does not know anything about the provider (the opposite is also true). They communicate via the following binding (assuming the provider is registered on the scope):
+	The grid itself does not know anything about the provider (the opposite is also true). They communicate via the following binding (assuming the <code>dataProvider</code> variable is registered on the scope):
 </p>
 <pre highlight="html">
-&lt;lg-grid model="dataProvider.getGridModel()"&gt;&lt;/lg-grid&gt;
+&lt;table lg-grid model="dataProvider.getGridModel()"&gt;&lt;/table&gt;
 </pre>
 <h3>Data provider anatomy</h3>
 <p>
