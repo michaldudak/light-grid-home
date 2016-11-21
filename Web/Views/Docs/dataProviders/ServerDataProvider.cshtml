@@ -32,6 +32,16 @@
 			<td>function(response)<br /> : { data:array, totalRecords:number }</td>
 			<td>A function that parses the server response (optional).</td>
 		</tr>
+		<tr>
+			<td>successHandler</td>
+			<td>function(response) : response</td>
+			<td>A function that is fired upon successful response. Can inspect the response data and optionally transform it (optional).</td>
+		</tr>
+		<tr>
+			<td>errorHandler</td>
+			<td>function(response)</td>
+			<td>A function that is fired upon erroneus response. Information returned from the server can be inspected at this point (optional).</td>
+		</tr>
 	</tbody>
 </table>
 
