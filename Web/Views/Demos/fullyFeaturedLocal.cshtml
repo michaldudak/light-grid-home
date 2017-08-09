@@ -1,4 +1,4 @@
-﻿<script>
+<script>
 	function everythingLocalController($scope, $http, lgLocalDataProviderFactory) {
 		$scope.dataProvider = lgLocalDataProviderFactory.create([]);
 		$scope.dataProvider.setPageSize(5);
@@ -27,6 +27,8 @@
 	The following sample presents an editable grid with sorting, paging and filtering features.
 	It is backed by an array with almost 30000 elements (US zip codes taken from <a rel="nofollow" href="http://jsonstudio.com/resources">http://jsonstudio.com/resources</a>).
 </p>
+
+<p>This sample is also available on <a href="https://plnkr.co/edit/M4XD6nefVuLX2bjXZqA7?p=preview">Plunkr.</a></p>
 
 <div ng-controller="everythingLocalController" ng-non-bindable>
 	<div class="btn-toolbar">
