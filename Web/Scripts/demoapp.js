@@ -1,13 +1,14 @@
-﻿(function (window, ng) {
+(function (window, ng) {
 	"use strict";
 
 	var app = ng.module("lightGridSamples", ["lightGrid", "lightGridDataProviders", "lightGridControls", "lightGridHomeUtils", "ngRoute"]);
 	window.app = app;
 
-	app.config(["$routeProvider", "$controllerProvider", "$compileProvider", function ($routeProvider, $controllerProvider, $compileProvider) {
+	app.config(["$routeProvider", "$controllerProvider", "$compileProvider", "$locationProvider", function ($routeProvider, $controllerProvider, $compileProvider, $locationProvider) {
 
 		$controllerProvider.allowGlobals();
 		$compileProvider.debugInfoEnabled(false);
+		$locationProvider.hashPrefix("");
 
 		$routeProvider
 			.when("/simplest", {

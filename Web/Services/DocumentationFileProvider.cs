@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,7 +38,7 @@ namespace Web.Services
 			return viewsFolder
 				.EnumerateFiles("*.cshtml")
 				.Select(f => Path.GetFileNameWithoutExtension(f.Name))
-				.OrderBy(n => n == FirstItemTitle ? string.Empty : n)
+				.OrderBy(n => n.ToLower() == FirstItemTitle.ToLower() ? string.Empty : n)
 				.ToList();
 		}
 	}

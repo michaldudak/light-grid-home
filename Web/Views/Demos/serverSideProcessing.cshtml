@@ -1,4 +1,4 @@
-﻿<script>
+<script>
 	function serverSideProcessingController($scope, $http, lgServerDataProviderFactory) {
 		$scope.dataProvider = lgServerDataProviderFactory.create("/Demos/SampleData");
 		$scope.dataProvider.limitTo(10);

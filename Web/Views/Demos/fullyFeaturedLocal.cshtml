@@ -8,8 +8,8 @@
 		});
 
 		$scope.loadData = function () {
-			$http.get("Data/zips.json").success(function (data) {
-				$scope.dataProvider.setModel(data);
+			$http.get("Data/zips.json").then(function (response) {
+				$scope.dataProvider.setModel(response.data);
 			});
 		};
 	}
@@ -28,7 +28,7 @@
 	It is backed by an array with almost 30000 elements (US zip codes taken from <a rel="nofollow" href="http://jsonstudio.com/resources">http://jsonstudio.com/resources</a>).
 </p>
 
-<p>This sample is also available on <a href="https://plnkr.co/edit/M4XD6nefVuLX2bjXZqA7?p=preview">Plunkr.</a></p>
+<p>This sample is also available on <a href="https://plnkr.co/edit/sygjUvOlkAxVHAUroGFz?p=preview">Plunkr.</a></p>
 
 <div ng-controller="everythingLocalController" ng-non-bindable>
 	<div class="btn-toolbar">
@@ -139,6 +139,7 @@
 	</table>
 
 	<lg-pager data-provider="dataProvider"></lg-pager>
+	<lg-page-size-options provider="dataProvider" options="[5, 10, 20]"></lg-page-size-options>
 
 	<pre>{{ dataProvider.getGridModel() | json}}</pre>
 </div>
