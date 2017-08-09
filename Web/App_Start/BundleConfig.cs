@@ -4,16 +4,16 @@ namespace Web
 {
 	public class BundleConfig
 	{
-		// For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
 		public static void RegisterBundles(BundleCollection bundles)
 		{
 			var scripts =
 				new ScriptBundle("~/bundles/libraries")
-					.Include("~/Scripts/jquery.js")
-					.Include("~/Scritps/bootstrap.js")
 					.Include("~/Scripts/angular.js")
-					.Include("~/Scripts/angular-route.js");
+					.Include("~/Scripts/angular-route.js")
+					.Include("~/Scripts/jquery.js")
+					.Include("~/Scritps/bootstrap.js");
 
+			scripts.Transforms.Add(new JsMinify());
 			bundles.Add(scripts);
 
 			var samplesScripts =

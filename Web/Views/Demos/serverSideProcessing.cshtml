@@ -53,7 +53,7 @@
 		<tbody>
 			<tr lg-row-start>
 				<td>
-					<lg-view>
+					<lg-view view="default">
 						{{ row.data.city }}
 					</lg-view>
 					<lg-view view="edit">
@@ -62,7 +62,7 @@
 				</td>
 
 				<td>
-					<lg-view>
+					<lg-view view="default">
 						{{ row.data.state }}
 					</lg-view>
 					<lg-view view="edit">
@@ -71,7 +71,7 @@
 				</td>
 
 				<td>
-					<lg-view>
+					<lg-view view="default">
 						{{ row.data._id }}
 					</lg-view>
 					<lg-view view="edit">
@@ -80,7 +80,7 @@
 				</td>
 
 				<td>
-					<lg-view>
+					<lg-view view="default">
 						{{ row.data.loc[0] | number }}
 					</lg-view>
 					<lg-view view="edit">
@@ -89,7 +89,7 @@
 				</td>
 
 				<td>
-					<lg-view>
+					<lg-view view="default">
 						{{ row.data.loc[1] | number }}
 					</lg-view>
 					<lg-view view="edit">
@@ -98,7 +98,7 @@
 				</td>
 
 				<td>
-					<lg-view>
+					<lg-view view="default">
 						{{ row.data.pop }}
 					</lg-view>
 					<lg-view view="edit">
@@ -106,15 +106,14 @@
 					</lg-view>
 				</td>
 
-				<td>
-					<div lg-view>
-						<button class="btn btn-default btn-sm" lg-switch-view="edit">Edit</button>
-						<button class="btn btn-default btn-sm" lg-toggle-expanded-row="detailsTemplate.html">Details</button>
+				<td class="controls">
+					<div lg-view="default" class="btn-group">
+						<button class="btn btn-default btn-sm" lg-switch-view="edit" title="Edit"><i class="fa fa-fw fa-pencil-square-o"></i></button>
+						<button class="btn btn-default btn-sm" lg-toggle-expanded-row="detailsTemplate.html" title="Map"><i class="fa fa-fw fa-map"></i></button>
 					</div>
-					<div lg-view="edit">
-						<button class="btn btn-primary btn-sm" lg-persist-data data-provider="dataProvider">Save</button>
-						<button class="btn btn-default btn-sm" lg-switch-view="read">Cancel</button>
-						<button class="btn btn-default btn-sm" lg-toggle-expanded-row>Details</button>
+					<div lg-view="edit" class="btn-group">
+						<button class="btn btn-primary btn-sm" lg-persist-data data-provider="dataProvider" title="Save"><i class="fa fa-fw fa-check"></i></button>
+						<button class="btn btn-warning btn-sm" lg-switch-view="default" title="Cancel"><i class="fa fa-fw fa-times"></i></button>
 					</div>
 				</td>
 			</tr>
@@ -124,7 +123,8 @@
 		</tbody>
 	</table>
 
-	<lg-pager data-provider="dataProvider" page-size-options="10,20,50,100"></lg-pager>
+	<lg-pager data-provider="dataProvider"></lg-pager>
+	<lg-page-size-options data-provider="dataProvider" options="[10, 20, 50, 100]"></lg-page-size-options>
 </div>
 
 <source-display></source-display>

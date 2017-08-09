@@ -1,0 +1,31 @@
+﻿<h2><code>lgPageSizeOptions</code> directive</h2>
+
+<p>Renders a page size selector to be used with the <code>lgPager</code> directive.</p>
+
+<h3>Attributes</h3>
+<table class="table table-striped">
+	<thead>
+	<tr>
+		<th>Attribute</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>provider</td>
+		<td>data provider</td>
+		<td>A reference to a data provider this control will communicate with.</td>
+	</tr>
+	<tr>
+		<td>options</td>
+		<td>Array of Numbers</td>
+		<td>An array of integers specifying page size options. If not set, defaults to [10, 25, 50]</td>
+	</tr>
+	</tbody>
+</table>
+
+<h3>Examples</h3>
+<pre highlight="html">
+&lt;lg-page-size-options provider="dataProvider" options="[5, 10, 20]"&gt;&lt;/lg-page-size-options&gt;
+</pre>

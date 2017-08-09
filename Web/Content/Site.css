@@ -175,3 +175,9 @@ dd {
 	-ms-word-wrap: normal;
 	word-wrap: normal;
 }
+
+.controls {
+	width: 5.5em;
+	box-sizing: content-box;
+	text-align: right;
+}

@@ -178,6 +178,7 @@
     <Content Include="Views\Docs\dataProviders\ServerDataProvider.cshtml" />
     <Content Include="Views\Docs\controls\Overview.cshtml" />
     <Content Include="Views\Demos\gridOnCustomElement.cshtml" />
+    <Content Include="Views\Docs\controls\lgPageSizeOptions.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

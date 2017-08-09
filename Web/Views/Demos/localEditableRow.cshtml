@@ -20,33 +20,33 @@
 		<tbody>
 			<tr lg-row>
 				<td width="28%">
-					<div lg-view>{{ row.data.make }}</div>
+					<div lg-view="default">{{ row.data.make }}</div>
 					<div lg-view="edit">
 						<input ng-model="row.viewModel.make" class="form-control input-sm" />
 					</div>
 				</td>
 
 				<td width="28%">
-					<div lg-view>{{ row.data.model }}</div>
+					<div lg-view="default">{{ row.data.model }}</div>
 					<div lg-view="edit">
 						<input ng-model="row.viewModel.model" class="form-control input-sm" />
 					</div>
 				</td>
 
 				<td width="28%">
-					<div lg-view>{{ row.data.engine }}</div>
+					<div lg-view="default">{{ row.data.engine }}</div>
 					<div lg-view="edit">
 						<input ng-model="row.viewModel.engine" class="form-control input-sm" />
 					</div>
 				</td>
 
-				<td width="16%">
-					<div lg-view>
-						<button class="btn btn-default btn-sm" lg-switch-view="edit">Edit</button>
+				<td class="controls">
+					<div lg-view="default">
+						<button class="btn btn-default btn-sm" lg-switch-view="edit" title="Edit"><i class="fa fa-fw fa-pencil-square-o"></i></button>
 					</div>
-					<div lg-view="edit">
-						<button class="btn btn-primary btn-sm" lg-persist-data data-provider="dataProvider">Save</button>
-						<button class="btn btn-default btn-sm" lg-switch-view="read">Cancel</button>
+					<div lg-view="edit" class="btn-group">
+						<button class="btn btn-primary btn-sm" lg-persist-data data-provider="dataProvider" title="Save"><i class="fa fa-fw fa-check"></i></button>
+						<button class="btn btn-warning btn-sm" lg-switch-view="default" title="Cancel"><i class="fa fa-fw fa-times"></i></button>
 					</div>
 				</td>
 			</tr>
